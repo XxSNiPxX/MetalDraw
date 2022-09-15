@@ -61,9 +61,10 @@ final class TextureHelper {
     }
 
     static func createTexture(with size: CGSize, device: MTLDevice) -> MTLTexture {
+        print(size,"size")
         let textureDesc = MTLTextureDescriptor()
-        textureDesc.width = 1668
-        textureDesc.height = 2388
+        textureDesc.width = Int(size.width*2)
+        textureDesc.height = Int(size.height*2)
         textureDesc.pixelFormat = .bgra8Unorm
         textureDesc.usage = [.renderTarget,.shaderRead]
         guard let texture = device.makeTexture(descriptor: textureDesc) else {

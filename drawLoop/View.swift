@@ -70,7 +70,7 @@ class View: BaseView {
         
         // this is the default but if we wanted to perform compute on the final rendering layer we could set this to no
         _metalLayer.framebufferOnly = false
-        finalRenderTexture = TextureHelper.createTexture(with: _metalLayer.bounds.size, device:device)
+        finalRenderTexture = TextureHelper.createTexture(with: UIScreen.main.bounds.size, device:device)
     }
     
 
@@ -206,7 +206,7 @@ class View: BaseView {
     // The current framebuffer can be read by delegate during -[MetalViewDelegate render:]
     // This call may block until the framebuffer is available.
     var renderPassDescriptor: MTLRenderPassDescriptor? {
-        if let drawable = self.currentDrawable {
+        if self.currentDrawable != nil {
             self.setupRenderPassDescriptorForTexture(finalRenderTexture)
         } else {
             NSLog(">> ERROR: Failed to get a drawable!")

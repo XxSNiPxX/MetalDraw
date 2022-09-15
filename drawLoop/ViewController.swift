@@ -21,7 +21,7 @@ protocol ViewControllerDelegate: NSObjectProtocol {
     func viewController(_ viewController: ViewController, willPause pause: Bool)
     
     @available(iOS 13.0, *)
-    func updateVertices(_ viewController: ViewController, vertex vertex:Any!)
+    func updateVertices(_ viewController: ViewController, vertex:Any!)
     
     @available(iOS 13.0, *)
     func resetVertices(_ viewController: ViewController)
@@ -120,19 +120,7 @@ class ViewController: BaseViewController {
     }
     
 
-//    @objc func _windowWillClose(_ notification: Notification) {
-//        // Stop the display link when the window is closing because we will
-//        // not be able to get a drawable, but the display link may continue
-//        // to fire
-//
-//        if notification.object as AnyObject? === self.view.window {
-//            CVDisplayLinkStop(_displayLink!)
-//            _displaySource!.cancel()
-//        }
-//    }
 
-    
-    // Called when loaded from nib
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
