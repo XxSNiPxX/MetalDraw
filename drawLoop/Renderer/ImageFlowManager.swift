@@ -21,7 +21,7 @@ class ImageFlowManager: NSObject {
     var minimumNorm: Float = 1
     var minimumNormKeyVertex: Float = 0
     var minimumAngle: Float = 0.15
-    var interpolationDivider: Float = 0.1 // Higher -> use more RAM
+    var interpolationDivider: Float = 0.9 // Higher -> use more RAM
     private var _keyVertices: [VertexImage] = []
     private var _interpolationPipelineState: MTLComputePipelineState!
     private var _device: MTLDevice!

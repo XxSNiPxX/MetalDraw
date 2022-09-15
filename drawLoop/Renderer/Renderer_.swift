@@ -357,7 +357,7 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
                 options: .cpuCacheModeWriteCombined
             )
             
-            flowManager.clearInit()
+//            flowManager.clearInit()
         }
     }
     func updateVertices(_ viewController: ViewController, vertex: Any!) {
@@ -376,6 +376,12 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         
     }
     func resetFlow(_ flowManager: ImageFlowManager) {
+//        return
+        flowManager.stop()
+        
+    }
+    
+    func clearFlow(_ flowManager: ImageFlowManager) {
 //        return
         flowManager.clearInit()
         

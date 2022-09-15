@@ -32,7 +32,8 @@ protocol ViewControllerDelegate: NSObjectProtocol {
     @available(iOS 13.0, *)
     func resetFlow(_ flowManager: ImageFlowManager)
     
-    
+    @available(iOS 13.0, *)
+    func clearFlow(_ flowManager: ImageFlowManager)
 
 
 }
@@ -183,7 +184,7 @@ class ViewController: BaseViewController {
             _timeSinceLastDrawPreviousTime = currentTime
             if((Int(currentTime)%10) == 0){
                 print("inside the multiple of 3")
-                self.delegate?.resetFlow(_imageFlowManager)
+                self.delegate?.clearFlow(_imageFlowManager)
 
                 
             }
