@@ -14,10 +14,8 @@ import MetalKit
 @objc(ImageFlowManager)
 class ImageFlowManager: NSObject {
     var indices: [UInt32] = []
-    var layerz:[[VertexImage]]=[]
     var vertices: [VertexImage] = []
     var imageVertices: [VertexImage] = []
-//    var flows: [Int] = []
     var minimumNorm: Float = 1
     var minimumNormKeyVertex: Float = 0
     var minimumAngle: Float = 0.15
@@ -37,12 +35,9 @@ class ImageFlowManager: NSObject {
     
     func addKeyVertex(_ vertex: VertexImage) {
         
-        var normOkay = true
+        let normOkay = true
         
-//        if _keyVertices.count >= 2 {
-//            normOkay = Vector(getKeyVertex(0)!, vertex).norm > minimumNormKeyVertex
-//        }
-        
+
         if normOkay {
             appendAndMaintainArrayLength(&_keyVertices, vertex, length: 4)
 
@@ -62,31 +57,20 @@ class ImageFlowManager: NSObject {
     }
     
     func clearInit(){
-//        imageVertices.removeAll()
-//        _keyVertices.removeAll()
+
         imageVertices=imageVertices.suffix(4)
-//        imageVertices.count-3
     }
     
     func stop() {
-        let nb = imageVertices.count - 1
 
-//        if flows.last != nb {
-//            flows.append(nb)
-//        }
-        layerz.append(imageVertices)
 
-//        if _lastTriangle != nil {
-//            addTriangleVertices(_lastTriangle!.calculateEndRightTriangle())
-//        }
-//
         imageVertices.removeAll()
         _keyVertices.removeAll()
         _lastVertex = nil
     }
     
     private func add(_ vertex: VertexImage,_ size:Float ,_ index: Int? = nil) {
-        var normOkay = true
+        let normOkay = true
         let angleOkay = true
        
         
@@ -107,10 +91,6 @@ class ImageFlowManager: NSObject {
                 let concernedVertex = getVertex(1)
             {
 
-//                let newFlow = _lastTriangle == nil
-                //Handle custom logic here
-          
-                
       
                 //State machine must start here
                 let cg=CGPoint(x: CGFloat(vertex.position.x), y:CGFloat(vertex.position.y))
