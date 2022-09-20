@@ -257,7 +257,7 @@ class View: BaseView {
             }
             
             // rendering delegate method to ask renderer to draw this frame's content
-            self.delegate?.render(self)
+//            self.delegate?.render(self)
             
             // do not retain current drawable beyond the frame.
             // There should be no strong references to this object outside of this view class

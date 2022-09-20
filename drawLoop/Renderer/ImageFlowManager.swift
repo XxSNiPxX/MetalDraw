@@ -24,11 +24,12 @@ class ImageFlowManager: NSObject {
     private var _interpolationPipelineState: MTLComputePipelineState!
     private var _device: MTLDevice!
     private var _lastVertex: VertexImage?
-
+    private var config:AppConfig?
 
     
     override init() {
         super.init()
+        config=AppConfig()
         stop()
 
     }
@@ -45,13 +46,20 @@ class ImageFlowManager: NSObject {
                 let interpolationB = getKeyVertex(1)!
                 let interpolationA = getKeyVertex(2) ?? interpolationB
                 let beforeInterpolation = getKeyVertex(3) ?? vertex
+                add(vertex,vertex.point_size)
+                if((config?.catmullLogic) != false){
+                                    interpolateCatmullRom(
+                                        beforeInterpolation,
+                                        interpolationA,
+                                        interpolationB,
+                                        vertex
+                                    )
+                }else{
+                    add(vertex,vertex.point_size)
+
+                }
+
                 
-                interpolateCatmullRom(
-                    beforeInterpolation,
-                    interpolationA,
-                    interpolationB,
-                    vertex
-                )
             }
         }
     }

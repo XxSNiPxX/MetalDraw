@@ -34,6 +34,9 @@ protocol ViewControllerDelegate: NSObjectProtocol {
     
     @available(iOS 13.0, *)
     func clearFlow(_ flowManager: ImageFlowManager)
+    
+    @available(iOS 13.0, *)
+    func render(_ view: View)
 
 
 }
@@ -68,7 +71,8 @@ class ViewController: BaseViewController {
     
     // our renderer instance
     private var _renderer: Renderer_!
-    
+    private var renderView: View!
+
     deinit {
             NotificationCenter.default.removeObserver(self,
                 name: UIApplication.didEnterBackgroundNotification,
@@ -141,7 +145,7 @@ class ViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let renderView = self.view as! View
+        renderView = self.view as? View
         renderView.delegate = _renderer
         
         // load all renderer assets before starting game loop
@@ -170,12 +174,12 @@ class ViewController: BaseViewController {
             
             // keep track of the time interval between draws
             _timeSinceLastDrawPreviousTime = currentTime
-            if((Int(currentTime)%10) == 0){
-                print("inside the multiple of 3")
-                self.delegate?.clearFlow(_imageFlowManager)
-
-                
-            }
+//            if((Int(currentTime)%10) == 0){
+//                print("inside the multiple of 3")
+//                self.delegate?.clearFlow(_imageFlowManager)
+//
+//
+//            }
 
             
         }
@@ -254,9 +258,15 @@ class ViewController: BaseViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print(_imageFlowManager.imageVertices,"IMAGE VERTICES")
+        print(touches.first,"FIRST")
         let nc = NotificationCenter.default
         nc.post( name: UIApplication.willEnterForegroundNotification, object: nil)
-        for touch in touches {
+        var coalescedPoints: [UITouch] = []
+        if let coalesced = event?.coalescedTouches(for: touches.first!) {
+            coalescedPoints.append(contentsOf: coalesced)
+        }
+        for touch in coalescedPoints {
             let point = touch.preciseLocation(in: view);
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
             let vertex=VertexImage(
@@ -268,6 +278,8 @@ class ViewController: BaseViewController {
             _imageFlowManager.addKeyVertex(vertex)
 //            self.delegate?.updateVertices(self,vertex:vertex)
             self.delegate?.updateFlow(_imageFlowManager)
+            self.delegate?.render(renderView)
+
 
         }
     }
@@ -275,7 +287,11 @@ class ViewController: BaseViewController {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let nc = NotificationCenter.default
         nc.post( name: UIApplication.willEnterForegroundNotification, object: nil)
-        for touch in touches {
+        var coalescedPoints: [UITouch] = []
+        if let coalesced = event?.coalescedTouches(for: touches.first!) {
+            coalescedPoints.append(contentsOf: coalesced)
+        }
+        for touch in coalescedPoints {
             let point = touch.preciseLocation(in: view);
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
             let vertex=VertexImage(
@@ -284,8 +300,10 @@ class ViewController: BaseViewController {
                 color: UIColor.red,
                 rotation: 0
             )
+   
             _imageFlowManager.addKeyVertex(vertex)
             self.delegate?.updateFlow(_imageFlowManager)
+            self.delegate?.render(renderView)
 
 //            self.delegate?.updateVertices(self,vertex: vertex)
 
@@ -293,10 +311,34 @@ class ViewController: BaseViewController {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print(touches.first,"LAST")
         let nc = NotificationCenter.default
         nc.post( name: UIApplication.didEnterBackgroundNotification, object: nil)
-        self.delegate?.resetVertices(self)
+        var coalescedPoints: [UITouch] = []
+        if let coalesced = event?.coalescedTouches(for: touches.first!) {
+            coalescedPoints.append(contentsOf: coalesced)
+        }
+        for touch in coalescedPoints {
+            let point = touch.preciseLocation(in: view);
+            let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
+            let vertex=VertexImage(
+                position: cg,
+                size: 40 * touch.force,
+                color: UIColor.red,
+                rotation: 0
+            )
+   
+            _imageFlowManager.addKeyVertex(vertex)
+            self.delegate?.updateFlow(_imageFlowManager)
+            self.delegate?.render(renderView)
+
+//            self.delegate?.updateVertices(self,vertex: vertex)
+
+        }
+//        self.delegate?.resetVertices(self)
         self.delegate?.resetFlow(_imageFlowManager)
+        self.delegate?.clearFlow(_imageFlowManager)
+
     }
     
 }
