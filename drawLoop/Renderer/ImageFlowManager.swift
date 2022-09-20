@@ -35,7 +35,8 @@ class ImageFlowManager: NSObject {
     }
     
     func addKeyVertex(_ vertex: VertexImage) {
-        
+         imageVertices.append(vertex)
+        return;
         let normOkay = true
         
 
@@ -46,7 +47,7 @@ class ImageFlowManager: NSObject {
                 let interpolationB = getKeyVertex(1)!
                 let interpolationA = getKeyVertex(2) ?? interpolationB
                 let beforeInterpolation = getKeyVertex(3) ?? vertex
-                add(vertex,vertex.point_size)
+//                add(vertex,vertex.point_size)
                 if((config?.catmullLogic) != false){
                                     interpolateCatmullRom(
                                         beforeInterpolation,

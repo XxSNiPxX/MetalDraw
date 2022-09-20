@@ -111,96 +111,11 @@ class View: BaseView {
         // make sure to clear every frame for best performance
         colorAttachment?.loadAction = .load
         colorAttachment?.clearColor = MTLClearColorMake(0.65, 0.65, 0.65, 1.0)
+        colorAttachment?.storeAction = MTLStoreAction.store
         
-        // if sample count is greater than 1, render into using MSAA, then resolve into our color texture
-        if sampleCount > 1 {
-            let  doUpdate =     ( _msaaTex?.width       != texture.width  )
-                ||  ( _msaaTex?.height      != texture.height )
-                ||  ( _msaaTex?.sampleCount != sampleCount   )
-            
-            if _msaaTex == nil || (_msaaTex != nil && doUpdate) {
-                let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm,
-                    width: texture.width,
-                    height: texture.height,
-                    mipmapped: false)
-                desc.textureType = .type2DMultisample
-                
-                // sample count was specified to the view by the renderer.
-                // this must match the sample count given to any pipeline state using this render pass descriptor
-                desc.sampleCount = sampleCount
-                
-                _msaaTex = device?.makeTexture(descriptor: desc)
-            }
-            
-            // When multisampling, perform rendering to _msaaTex, then resolve
-            // to 'texture' at the end of the scene
-            colorAttachment?.texture = _msaaTex
-            colorAttachment?.resolveTexture = texture
-            
-            // set store action to resolve in this case
-            colorAttachment?.storeAction = MTLStoreAction.multisampleResolve
-        } else {
-            // store only attachments that will be presented to the screen, as in this case
-            colorAttachment?.storeAction = MTLStoreAction.store
-        }
+    
         
-        // Now create the depth and stencil attachments
-        
-        if depthPixelFormat != .invalid {
-            let doUpdate =     ( _depthTex?.width       != texture.width  )
-                ||  ( _depthTex?.height      != texture.height )
-                ||  ( _depthTex?.sampleCount != sampleCount   )
-            
-            if _depthTex == nil || doUpdate {
-                //  If we need a depth texture and don't have one, or if the depth texture we have is the wrong size
-                //  Then allocate one of the proper size
-                let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: depthPixelFormat,
-                    width: texture.width,
-                    height: texture.height,
-                    mipmapped: false)
-                
-                desc.textureType = (sampleCount > 1) ? .type2DMultisample : .type2D
-                desc.sampleCount = sampleCount
-                desc.usage = MTLTextureUsage()
-                desc.storageMode = .private
-                
-                _depthTex = device?.makeTexture(descriptor: desc)
-                
-                if let depthAttachment = _renderPassDescriptor?.depthAttachment {
-                    depthAttachment.texture = _depthTex
-                    depthAttachment.loadAction = .clear
-                    depthAttachment.storeAction = .dontCare
-                    depthAttachment.clearDepth = 1.0
-                }
-            }
-        }
-        
-        if stencilPixelFormat != .invalid {
-            let doUpdate  =    ( _stencilTex?.width       != texture.width  )
-                ||  ( _stencilTex?.height      != texture.height )
-                ||  ( _stencilTex?.sampleCount != sampleCount   )
-            
-            if _stencilTex == nil || doUpdate {
-                //  If we need a stencil texture and don't have one, or if the depth texture we have is the wrong size
-                //  Then allocate one of the proper size
-                let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: stencilPixelFormat,
-                    width: texture.width,
-                    height: texture.height,
-                    mipmapped: false)
-                
-                desc.textureType = (sampleCount > 1) ? .type2DMultisample : .type2D
-                desc.sampleCount = sampleCount
-                
-                _stencilTex = device?.makeTexture(descriptor: desc)
-                
-                if let stencilAttachment = _renderPassDescriptor?.stencilAttachment {
-                    stencilAttachment.texture = _stencilTex
-                    stencilAttachment.loadAction = .clear
-                    stencilAttachment.storeAction = .dontCare
-                    stencilAttachment.clearStencil = 0
-                }
-            }
-        }
+
     }
     
     // The current framebuffer can be read by delegate during -[MetalViewDelegate render:]
@@ -219,11 +134,7 @@ class View: BaseView {
     
     //// the current drawable created within the view's CAMetalLayer
     var currentDrawable: CAMetalDrawable? {
-        if _currentDrawable == nil {
-            _currentDrawable = _metalLayer.nextDrawable()
-        }
-        
-        return _currentDrawable!
+        return _metalLayer.nextDrawable()
     }
     
     //// view controller will be call off the main thread
@@ -251,7 +162,7 @@ class View: BaseView {
                 _metalLayer.drawableSize = drawableSize
                 
                 // renderer delegate method so renderer can resize anything if needed
-                delegate?.reshape(self)
+//                delegate?.reshape(self)
                 
                 _layerSizeDidUpdate = false
             }

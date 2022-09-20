@@ -159,37 +159,37 @@ class ViewController: BaseViewController {
     @objc func gameloop() {
         
         // tell our delegate to update itself here.
-        delegate?.update(self)
-        
-        if !_firstDrawOccurred {
-            // set up timing data for display since this is the first time through this loop
-            timeSinceLastDraw             = 0.0
-            _timeSinceLastDrawPreviousTime = CACurrentMediaTime()
-            _firstDrawOccurred              = true
-        } else {
-            // figure out the time since we last we drew
-            let currentTime = CACurrentMediaTime()
-            
-            timeSinceLastDraw = currentTime - _timeSinceLastDrawPreviousTime
-            
-            // keep track of the time interval between draws
-            _timeSinceLastDrawPreviousTime = currentTime
-//            if((Int(currentTime)%10) == 0){
-//                print("inside the multiple of 3")
-//                self.delegate?.clearFlow(_imageFlowManager)
+//        delegate?.update(self)
+//        
+//        if !_firstDrawOccurred {
+//            // set up timing data for display since this is the first time through this loop
+//            timeSinceLastDraw             = 0.0
+//            _timeSinceLastDrawPreviousTime = CACurrentMediaTime()
+//            _firstDrawOccurred              = true
+//        } else {
+//            // figure out the time since we last we drew
+//            let currentTime = CACurrentMediaTime()
+//            
+//            timeSinceLastDraw = currentTime - _timeSinceLastDrawPreviousTime
+//            
+//            // keep track of the time interval between draws
+//            _timeSinceLastDrawPreviousTime = currentTime
+////            if((Int(currentTime)%10) == 0){
+////                print("inside the multiple of 3")
+////                self.delegate?.clearFlow(_imageFlowManager)
+////
+////
+////            }
 //
-//
-//            }
-
-            
-        }
-        
-        // display (render)
-        
-        assert(self.view is View)
-        
-        // call the display method directly on the render view (setNeedsDisplay: has been disabled in the renderview by default)
-        (self.view as! View).display()
+//            
+//        }
+//        
+//        // display (render)
+//        
+//        assert(self.view is View)
+//        
+//        // call the display method directly on the render view (setNeedsDisplay: has been disabled in the renderview by default)
+//        (self.view as! View).display()
     }
     
     // use invalidates the main game loop. when the app is set to terminate
@@ -259,14 +259,15 @@ class ViewController: BaseViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print(_imageFlowManager.imageVertices,"IMAGE VERTICES")
-        print(touches.first,"FIRST")
-        let nc = NotificationCenter.default
-        nc.post( name: UIApplication.willEnterForegroundNotification, object: nil)
+//        let nc = NotificationCenter.default
+//        nc.post( name: UIApplication.willEnterForegroundNotification, object: nil)
         var coalescedPoints: [UITouch] = []
         if let coalesced = event?.coalescedTouches(for: touches.first!) {
             coalescedPoints.append(contentsOf: coalesced)
         }
         for touch in coalescedPoints {
+            print(touch.force,"FIRST")
+
             let point = touch.preciseLocation(in: view);
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
             let vertex=VertexImage(
@@ -277,16 +278,18 @@ class ViewController: BaseViewController {
             )
             _imageFlowManager.addKeyVertex(vertex)
 //            self.delegate?.updateVertices(self,vertex:vertex)
-            self.delegate?.updateFlow(_imageFlowManager)
-            self.delegate?.render(renderView)
 
 
         }
+        self.delegate?.updateFlow(_imageFlowManager)
+
+        self.delegate?.render(renderView)
+
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let nc = NotificationCenter.default
-        nc.post( name: UIApplication.willEnterForegroundNotification, object: nil)
+//        let nc = NotificationCenter.default
+//        nc.post( name: UIApplication.willEnterForegroundNotification, object: nil)
         var coalescedPoints: [UITouch] = []
         if let coalesced = event?.coalescedTouches(for: touches.first!) {
             coalescedPoints.append(contentsOf: coalesced)
@@ -294,26 +297,30 @@ class ViewController: BaseViewController {
         for touch in coalescedPoints {
             let point = touch.preciseLocation(in: view);
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
+            print(touch.force,"FORECE ISSS")
+                                    
             let vertex=VertexImage(
                 position: cg,
                 size: 40 * touch.force,
-                color: UIColor.red,
+                color: UIColor.yellow,
                 rotation: 0
             )
    
             _imageFlowManager.addKeyVertex(vertex)
-            self.delegate?.updateFlow(_imageFlowManager)
-            self.delegate?.render(renderView)
 
 //            self.delegate?.updateVertices(self,vertex: vertex)
 
         }
+        self.delegate?.updateFlow(_imageFlowManager)
+
+        self.delegate?.render(renderView)
+
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         print(touches.first,"LAST")
-        let nc = NotificationCenter.default
-        nc.post( name: UIApplication.didEnterBackgroundNotification, object: nil)
+//        let nc = NotificationCenter.default
+//        nc.post( name: UIApplication.didEnterBackgroundNotification, object: nil)
         var coalescedPoints: [UITouch] = []
         if let coalesced = event?.coalescedTouches(for: touches.first!) {
             coalescedPoints.append(contentsOf: coalesced)
@@ -321,20 +328,23 @@ class ViewController: BaseViewController {
         for touch in coalescedPoints {
             let point = touch.preciseLocation(in: view);
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
+            print(touch.force,"FORECE ISSS")
             let vertex=VertexImage(
                 position: cg,
-                size: 40 * touch.force,
-                color: UIColor.red,
+                size: 40 ,//* touch.force,
+                color: UIColor.green,
                 rotation: 0
             )
    
             _imageFlowManager.addKeyVertex(vertex)
-            self.delegate?.updateFlow(_imageFlowManager)
-            self.delegate?.render(renderView)
 
 //            self.delegate?.updateVertices(self,vertex: vertex)
 
         }
+        self.delegate?.updateFlow(_imageFlowManager)
+
+        self.delegate?.render(renderView)
+
 //        self.delegate?.resetVertices(self)
         self.delegate?.resetFlow(_imageFlowManager)
         self.delegate?.clearFlow(_imageFlowManager)

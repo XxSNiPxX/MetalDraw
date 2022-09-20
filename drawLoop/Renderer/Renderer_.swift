@@ -146,8 +146,8 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         }
         
         // setup view with drawable formats
-        view.depthPixelFormat   = .depth32Float
-        view.stencilPixelFormat = .invalid
+//        view.depthPixelFormat   = .depth32Float
+//        view.stencilPixelFormat = .invalid
         view.sampleCount        = 1
         bufferPool = LockableBufferPool<MetalBuffer<VertexImage>>.init(withCount: 30, factoryFunction: { () -> MetalBuffer<VertexImage> in
             let buffer = MetalBuffer<VertexImage>(vertices: [], mtlDevice: _device)
@@ -298,13 +298,13 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
             renderEncoder?.drawPrimitives(type:  .point, vertexStart: 0, vertexCount: length)
             renderEncoder?.endEncoding()
             renderEncoder?.popDebugGroup()
-            
+            let draww=view.currentDrawable
             FTBlitEncoder.copy(sourceTexture: view.finalRenderTexture!,
-                               targetTexture: view.currentDrawable?.texture as! MTLTexture,
+                               targetTexture: draww?.texture,
                                commandBuffer: commandBuffer!)
             
             // schedule a present once rendering to the framebuffer is complete
-            commandBuffer?.present(view.currentDrawable!)
+            commandBuffer?.present(draww!)
         }
         
         // call the view's completion handler which is required by the view since it will signal its semaphore and set up the next buffer
@@ -319,11 +319,7 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         // finalize rendering here. this will push the command buffer to the GPU
         commandBuffer?.commit()
         
-        // This index represents the current portion of the ring buffer being used for a given frame's constant buffer updates.
-        // Once the CPU has completed updating a shared CPU/GPU memory buffer region for a frame, this index should be updated so the
-        // next portion of the ring buffer can be written by the CPU. Note, this should only be done *after* all writes to any
-        // buffers requiring synchronization for a given frame is done in order to avoid writing a region of the ring buffer that the GPU may be reading.
-        _constantDataBufferIndex = (_constantDataBufferIndex + 1) % kInFlightCommandBuffers
+
     }
     
     @available(iOS 13.0, *)
