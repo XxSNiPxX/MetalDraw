@@ -35,33 +35,31 @@ class ImageFlowManager: NSObject {
     }
     
     func addKeyVertex(_ vertex: VertexImage) {
-         imageVertices.append(vertex)
-        return;
+//         imageVertices.append(vertex)
+//        return;
         let normOkay = true
         
 
         if normOkay {
             appendAndMaintainArrayLength(&_keyVertices, vertex, length: 4)
-
-            if (_keyVertices.count >= 3) {
-                let interpolationB = getKeyVertex(1)!
-                let interpolationA = getKeyVertex(2) ?? interpolationB
-                let beforeInterpolation = getKeyVertex(3) ?? vertex
-//                add(vertex,vertex.point_size)
-                if((config?.catmullLogic) != false){
-                                    interpolateCatmullRom(
-                                        beforeInterpolation,
-                                        interpolationA,
-                                        interpolationB,
-                                        vertex
-                                    )
-                }else{
-                    add(vertex,vertex.point_size)
-
+            if((config?.catmullLogic) != false){
+                if (_keyVertices.count >= 3) {
+                    let interpolationB = getKeyVertex(1)!
+                    let interpolationA = getKeyVertex(2) ?? interpolationB
+                    let beforeInterpolation = getKeyVertex(3) ?? vertex
+    //                add(vertex,vertex.point_size)
+                                        interpolateCatmullRom(
+                                            beforeInterpolation,
+                                            interpolationA,
+                                            interpolationB,
+                                            vertex
+                                        )
                 }
-
-                
+            }else{
+                add(vertex, vertex.point_size)
             }
+   
+            
         }
     }
     

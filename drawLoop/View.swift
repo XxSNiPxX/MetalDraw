@@ -36,7 +36,6 @@ class View: BaseView {
     // view has a handle to the metal device when created
     private(set) var device: MTLDevice!
     
-    private var _currentDrawable: CAMetalDrawable?
     
     private var _renderPassDescriptor: MTLRenderPassDescriptor?
     
@@ -142,6 +141,9 @@ class View: BaseView {
     func display() {
         self.displayPrivate()
     }
+    func setupDisplay(){
+        return;
+    }
 
     private func displayPrivate() {
         // Create autorelease pool per frame to avoid possible deadlock situations
@@ -168,11 +170,9 @@ class View: BaseView {
             }
             
             // rendering delegate method to ask renderer to draw this frame's content
-//            self.delegate?.render(self)
+            self.delegate?.render(self)
             
-            // do not retain current drawable beyond the frame.
-            // There should be no strong references to this object outside of this view class
-            _currentDrawable    = nil
+
         }
     }
     override var contentScaleFactor: CGFloat {

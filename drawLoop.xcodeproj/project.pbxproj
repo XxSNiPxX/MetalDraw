@@ -124,6 +124,7 @@
 		1456DE3028D09515000AD31A /* Metal */ = {
 			isa = PBXGroup;
 			children = (
+				1473B0ED28CB224F0053E3BA /* Extensions */,
 				1473B0F728CB2F170053E3BA /* ShaderTypes.h */,
 				1473B0FA28CB519E0053E3BA /* Shader_.metal */,
 			);
@@ -217,7 +218,6 @@
 				1456DE3028D09515000AD31A /* Metal */,
 				1473B10428CB63300053E3BA /* Smudge.png */,
 				1473B10228CB609F0053E3BA /* circle.png */,
-				1473B0ED28CB224F0053E3BA /* Extensions */,
 				1473B0B928CB14460053E3BA /* AppDelegate.swift */,
 				1473B0BB28CB14460053E3BA /* SceneDelegate.swift */,
 				1473B0BD28CB14460053E3BA /* ViewController.swift */,
