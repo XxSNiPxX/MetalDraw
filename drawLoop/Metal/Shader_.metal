@@ -19,6 +19,7 @@ struct Vertex {
 
 struct viewSize{
     float width;
+    
     float height;
 };
 

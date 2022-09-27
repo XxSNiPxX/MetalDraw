@@ -23,7 +23,7 @@ protocol ViewDelegate: NSObjectProtocol {
     func reshape(_ view: View)
     
     // delegate should perform all rendering here
-    func render(_ view: View)
+    func render(_ view: View,imageFlow:ImageFlowManager)
     
 }
 
@@ -138,14 +138,14 @@ class View: BaseView {
     
     //// view controller will be call off the main thread
 
-    func display() {
-        self.displayPrivate()
+    func display(imageFlow:ImageFlowManager) {
+        self.displayPrivate(imageFlow: imageFlow)
     }
     func setupDisplay(){
         return;
     }
 
-    private func displayPrivate() {
+    private func displayPrivate(imageFlow:ImageFlowManager) {
         // Create autorelease pool per frame to avoid possible deadlock situations
         // because there are 3 CAMetalDrawables sitting in an autorelease pool.
         
@@ -170,7 +170,7 @@ class View: BaseView {
             }
             
             // rendering delegate method to ask renderer to draw this frame's content
-            self.delegate?.render(self)
+            self.delegate?.render(self, imageFlow: imageFlow)
             
 
         }

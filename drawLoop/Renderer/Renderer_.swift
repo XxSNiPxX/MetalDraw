@@ -85,6 +85,10 @@ private let kCubeVertexData: [Float] = [
 
 @objc(Renderer_)
 class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
+    func render(_ view: View) {
+        return
+    }
+    
 
     
     // constant synchronization for buffering <kInFlightCommandBuffers> frames
@@ -248,7 +252,7 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
     //MARK: Render
     
     @available(iOS 13.0, *)
-    func render(_ view: View) {
+    func render(_ view: View,imageFlow:ImageFlowManager) {
         guard length > 0 else {
             return
         }
@@ -310,7 +314,8 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         // call the view's completion handler which is required by the view since it will signal its semaphore and set up the next buffer
         let block_sema = _inflight_semaphore
         commandBuffer?.addCompletedHandler{buffer in
-        
+//            self.resetFlow(imageFlow)
+
             // GPU has completed rendering the frame and is done using the contents of any buffers previously encoded on the CPU for that frame.
             // Signal the semaphore and allow the CPU to proceed and construct the next frame.
             block_sema.signal()
@@ -346,7 +351,6 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
 //
 //            print(flowManager.imageVertices.count,"vertices are")
             length=flowManager.imageVertices.count
-            print(length,"LEN IS")
             _verticesImageBuffer = _device?.makeBuffer(
                 bytes: flowManager.imageVertices,
                 length: flowManager.imageVertices.count * MemoryLayout<VertexImage>.stride,

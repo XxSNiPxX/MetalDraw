@@ -158,8 +158,8 @@ class ViewController: BaseViewController {
     @objc func gameloop() {
         
 //         tell our delegate to update itself here.
-//        delegate?.update(self)
-        
+        delegate?.updateFlow(_imageFlowManager)
+
         if !_firstDrawOccurred {
             // set up timing data for display since this is the first time through this loop
             timeSinceLastDraw             = 0.0
@@ -188,7 +188,7 @@ class ViewController: BaseViewController {
         assert(self.view is View)
         
         // call the display method directly on the render view (setNeedsDisplay: has been disabled in the renderview by default)
-        (self.view as! View).display()
+        (self.view as! View).display(imageFlow: _imageFlowManager)
     }
     
     // use invalidates the main game loop. when the app is set to terminate
@@ -267,7 +267,7 @@ class ViewController: BaseViewController {
 
 
 
-        self.delegate?.render(renderView)
+//        self.delegate?.render(renderView)
 
     }
     
@@ -276,19 +276,18 @@ class ViewController: BaseViewController {
         touchFunction(touches, with: event)
 
 
-        self.delegate?.render(renderView)
+//        self.delegate?.render(renderView)
 
-        print("MOVED",_imageFlowManager.imageVertices.count)
 
 
     }
-    
+    var i=0;
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)  {
-
+        i=0
          touchFunction(touches, with: event)
 
 
-        self.delegate?.render(renderView)
+//        self.delegate?.render(renderView)
 
 //        self.delegate?.resetVertices(self)
         self.delegate?.resetFlow(_imageFlowManager)
@@ -304,7 +303,10 @@ extension ViewController{
 //        if let coalesced = event?.coalescedTouches(for: touches.first!) {
 //            coalescedPoints.append(contentsOf: coalesced)
 //        }
+        
         for touch in touches {
+            print("Touch",i)
+            i=i+1
             let point = touch.preciseLocation(in: view);
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
             let vertex=VertexImage(
@@ -315,7 +317,7 @@ extension ViewController{
             )
    
             _imageFlowManager.addKeyVertex(vertex)
-            self.delegate?.updateFlow(_imageFlowManager)
+//            self.delegate?.updateFlow(_imageFlowManager)
 
 //            self.delegate?.updateVertices(self,vertex: vertex)
 
