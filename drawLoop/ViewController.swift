@@ -12,7 +12,7 @@ typealias BaseViewController = UIViewController
 @objc(ViewControllerDelegate)
 protocol ViewControllerDelegate: NSObjectProtocol {
     
-    // Note this method is called from the thread the main game loop is run
+//     Note this method is called from the thread the main game loop is run
     @available(iOS 13.0, *)
     func update(_ controller: ViewController)
     
@@ -27,14 +27,14 @@ protocol ViewControllerDelegate: NSObjectProtocol {
     func resetVertices(_ viewController: ViewController)
     
     @available(iOS 13.0, *)
-    func updateFlow(_ flowManager: ImageFlowManager)
+    func updateFlow(_ flowManager: alternateFlowManager)
     
     @available(iOS 13.0, *)
-    func resetFlow(_ flowManager: ImageFlowManager)
+    func resetFlow(_ flowManager: alternateFlowManager)
     
     @available(iOS 13.0, *)
-    func clearFlow(_ flowManager: ImageFlowManager)
-    
+    func clearFlow(_ flowManager: alternateFlowManager,length:Int)
+//    
     @available(iOS 13.0, *)
     func render(_ view: View)
 
@@ -54,7 +54,7 @@ class ViewController: BaseViewController {
     // set to 1 by default, which is the CADisplayLink default setting (60 FPS).
     // Setting to 2, will cause gameloop to trigger every other vsync (throttling to 30 FPS)
     var interval: Int = 0
-    private var _imageFlowManager: ImageFlowManager!
+    private var _imageFlowManager: alternateFlowManager!
 
     // app control
     
@@ -104,7 +104,7 @@ class ViewController: BaseViewController {
     
     private func initCommon() {
         _renderer = Renderer_()
-        _imageFlowManager = ImageFlowManager()
+        _imageFlowManager = alternateFlowManager()
         config=AppConfig()
         self.delegate = _renderer
             let notificationCenter = NotificationCenter.default
@@ -158,7 +158,7 @@ class ViewController: BaseViewController {
     @objc func gameloop() {
         
 //         tell our delegate to update itself here.
-        delegate?.updateFlow(_imageFlowManager)
+//        delegate?.updateFlow(_imageFlowManager)
 
         if !_firstDrawOccurred {
             // set up timing data for display since this is the first time through this loop
@@ -208,7 +208,7 @@ class ViewController: BaseViewController {
             
             if _displayLink != nil {
                 // inform the delegate we are about to pause
-                delegate?.viewController(self, willPause: pause)
+//                delegate?.viewController(self, willPause: pause)
                     _gameLoopPaused = pause
                     _displayLink!.isPaused = pause
                     if pause {
@@ -291,7 +291,7 @@ class ViewController: BaseViewController {
 
 //        self.delegate?.resetVertices(self)
         self.delegate?.resetFlow(_imageFlowManager)
-        self.delegate?.clearFlow(_imageFlowManager)
+     //   self.delegate?.clearFlow(_imageFlowManager)
         
     }
     
@@ -305,18 +305,16 @@ extension ViewController{
 //        }
         
         for touch in touches {
-            print("Touch",i)
-            i=i+1
             let point = touch.preciseLocation(in: view);
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
-            let vertex=VertexImage(
-                position: cg,
-                size: 40 * touch.force  ,//* touch.force,
-                color: UIColor.black,
-                rotation: 0
-            )
+//            let vertex=VertexImage(
+//                position: cg,
+//                size: 40 * touch.force  ,//* touch.force,
+//                color: UIColor.black,
+//                rotation: 0
+//            )
    
-            _imageFlowManager.addKeyVertex(vertex)
+            _imageFlowManager.addKeyVertex(cg, point_size: 40 * Float(touch.force))
 //            self.delegate?.updateFlow(_imageFlowManager)
 
 //            self.delegate?.updateVertices(self,vertex: vertex)

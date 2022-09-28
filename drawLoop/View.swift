@@ -20,10 +20,13 @@ typealias BaseView = UIView
 protocol ViewDelegate: NSObjectProtocol {
     
     // called if the view changes orientation or size, renderer can precompute its view and projection matricies here for example
-    func reshape(_ view: View)
+//    func reshape(_ view: View)
     
     // delegate should perform all rendering here
-    func render(_ view: View,imageFlow:ImageFlowManager)
+    func render(_ view: View,imageFlow:alternateFlowManager)
+    
+//    @available(iOS 13.0, *)
+//    func updateFlow(_ flowManager: ImageFlowManager)
     
 }
 
@@ -138,18 +141,20 @@ class View: BaseView {
     
     //// view controller will be call off the main thread
 
-    func display(imageFlow:ImageFlowManager) {
+    func display(imageFlow:alternateFlowManager) {
         self.displayPrivate(imageFlow: imageFlow)
     }
     func setupDisplay(){
         return;
     }
 
-    private func displayPrivate(imageFlow:ImageFlowManager) {
+    private func displayPrivate(imageFlow:alternateFlowManager) {
         // Create autorelease pool per frame to avoid possible deadlock situations
         // because there are 3 CAMetalDrawables sitting in an autorelease pool.
         
         autoreleasepool{
+//            self.delegate?.updateFlow(imageFlow)
+
             // handle display changes here
             if _layerSizeDidUpdate {
                 // set the metal layer to the drawable size in case orientation or size changes

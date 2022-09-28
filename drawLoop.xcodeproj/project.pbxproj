@@ -38,6 +38,8 @@
 		1473B10728CEF4E20053E3BA /* TextureHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B10628CEF4E20053E3BA /* TextureHelper.swift */; };
 		1473B10928CEF5070053E3BA /* CGUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B10828CEF5070053E3BA /* CGUtils.swift */; };
 		1473B10B28CEF8BE0053E3BA /* FTBlitEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B10A28CEF8BE0053E3BA /* FTBlitEncoder.swift */; };
+		E7A062D528E46AAA006A1CE4 /* alternateFlowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A062D428E46AAA006A1CE4 /* alternateFlowManager.swift */; };
+		E7A062D728E46BC6006A1CE4 /* VectorCG.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A062D628E46BC6006A1CE4 /* VectorCG.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +96,8 @@
 		1473B10628CEF4E20053E3BA /* TextureHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureHelper.swift; sourceTree = "<group>"; };
 		1473B10828CEF5070053E3BA /* CGUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGUtils.swift; sourceTree = "<group>"; };
 		1473B10A28CEF8BE0053E3BA /* FTBlitEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTBlitEncoder.swift; sourceTree = "<group>"; };
+		E7A062D428E46AAA006A1CE4 /* alternateFlowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = alternateFlowManager.swift; sourceTree = "<group>"; };
+		E7A062D628E46BC6006A1CE4 /* VectorCG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorCG.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +140,7 @@
 			children = (
 				1456DE2C28CF09D5000AD31A /* ImageFlowManager.swift */,
 				1473B0F828CB4DF50053E3BA /* Renderer_.swift */,
+				E7A062D428E46AAA006A1CE4 /* alternateFlowManager.swift */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
@@ -154,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				1456DE2E28CF0A01000AD31A /* Vector.swift */,
+				E7A062D628E46BC6006A1CE4 /* VectorCG.swift */,
 				1473B0F328CB22E20053E3BA /* Transforms.swift */,
 				1456DE3528D1D752000AD31A /* SIMDUtils.swift */,
 			);
@@ -392,7 +398,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7A062D528E46AAA006A1CE4 /* alternateFlowManager.swift in Sources */,
 				1473B0EF28CB225E0053E3BA /* SharedTypes.swift in Sources */,
+				E7A062D728E46BC6006A1CE4 /* VectorCG.swift in Sources */,
 				1456DE3D28D1EEF3000AD31A /* AppConfig.swift in Sources */,
 				1473B10B28CEF8BE0053E3BA /* FTBlitEncoder.swift in Sources */,
 				1473B0EA28CB157E0053E3BA /* View.swift in Sources */,

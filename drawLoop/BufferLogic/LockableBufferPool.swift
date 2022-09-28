@@ -25,6 +25,7 @@ class LockableBufferPool<T:Equatable>: RoundRobinPool<T> {
     }
     
     override func enqueueItem(_ item : T) {
+        
         super.enqueueItem(item);
         self.renderSemaphore.signal();
     }

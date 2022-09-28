@@ -19,69 +19,6 @@ struct VertexInfos {
 
 private let kInFlightCommandBuffers = 3
 
-private let kNumberOfBoxes = 2
-private let kBoxAmbientColors: [float4] = [
-    float4(0.18, 0.24, 0.8, 1.0),
-    float4(0.8, 0.24, 0.1, 1.0)
-]
-
-private let kBoxDiffuseColors: [float4] = [
-    float4(0.4, 0.4, 1.0, 1.0),
-    float4(0.8, 0.4, 0.4, 1.0)
-]
-
-private let kFOVY: Float = 65.0
-private let kEye    = float3(0.0, 0.0, 0.0)
-private let kCenter = float3(0.0, 0.0, 1.0)
-private let kUp     = float3(0.0, 1.0, 0.0)
-
-private let kWidth: Float = 0.75
-private let kHeight: Float = 0.75
-private let kDepth: Float = 0.75
-
-private let kCubeVertexData: [Float] = [
-    kWidth, -kHeight, kDepth,   0.0, -1.0,  0.0,
-    -kWidth, -kHeight, kDepth,   0.0, -1.0, 0.0,
-    -kWidth, -kHeight, -kDepth,   0.0, -1.0,  0.0,
-    kWidth, -kHeight, -kDepth,  0.0, -1.0,  0.0,
-    kWidth, -kHeight, kDepth,   0.0, -1.0,  0.0,
-    -kWidth, -kHeight, -kDepth,   0.0, -1.0,  0.0,
-    
-    kWidth, kHeight, kDepth,    1.0, 0.0,  0.0,
-    kWidth, -kHeight, kDepth,   1.0,  0.0,  0.0,
-    kWidth, -kHeight, -kDepth,  1.0,  0.0,  0.0,
-    kWidth, kHeight, -kDepth,   1.0, 0.0,  0.0,
-    kWidth, kHeight, kDepth,    1.0, 0.0,  0.0,
-    kWidth, -kHeight, -kDepth,  1.0,  0.0,  0.0,
-    
-    -kWidth, kHeight, kDepth,    0.0, 1.0,  0.0,
-    kWidth, kHeight, kDepth,    0.0, 1.0,  0.0,
-    kWidth, kHeight, -kDepth,   0.0, 1.0,  0.0,
-    -kWidth, kHeight, -kDepth,   0.0, 1.0,  0.0,
-    -kWidth, kHeight, kDepth,    0.0, 1.0,  0.0,
-    kWidth, kHeight, -kDepth,   0.0, 1.0,  0.0,
-    
-    -kWidth, -kHeight, kDepth,  -1.0,  0.0, 0.0,
-    -kWidth, kHeight, kDepth,   -1.0, 0.0,  0.0,
-    -kWidth, kHeight, -kDepth,  -1.0, 0.0,  0.0,
-    -kWidth, -kHeight, -kDepth,  -1.0,  0.0,  0.0,
-    -kWidth, -kHeight, kDepth,  -1.0,  0.0, 0.0,
-    -kWidth, kHeight, -kDepth,  -1.0, 0.0,  0.0,
-    
-    kWidth, kHeight,  kDepth,  0.0, 0.0,  1.0,
-    -kWidth, kHeight,  kDepth,  0.0, 0.0,  1.0,
-    -kWidth, -kHeight, kDepth,   0.0,  0.0, 1.0,
-    -kWidth, -kHeight, kDepth,   0.0,  0.0, 1.0,
-    kWidth, -kHeight, kDepth,   0.0,  0.0,  1.0,
-    kWidth, kHeight,  kDepth,  0.0, 0.0,  1.0,
-    
-    kWidth, -kHeight, -kDepth,  0.0,  0.0, -1.0,
-    -kWidth, -kHeight, -kDepth,   0.0,  0.0, -1.0,
-    -kWidth, kHeight, -kDepth,  0.0, 0.0, -1.0,
-    kWidth, kHeight, -kDepth,  0.0, 0.0, -1.0,
-    kWidth, -kHeight, -kDepth,  0.0,  0.0, -1.0,
-    -kWidth, kHeight, -kDepth,  0.0, 0.0, -1.0
-]
 
 @objc(Renderer_)
 class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
@@ -153,10 +90,11 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
 //        view.depthPixelFormat   = .depth32Float
 //        view.stencilPixelFormat = .invalid
         view.sampleCount        = 1
-        bufferPool = LockableBufferPool<MetalBuffer<VertexImage>>.init(withCount: 30, factoryFunction: { () -> MetalBuffer<VertexImage> in
+        bufferPool = LockableBufferPool<MetalBuffer<VertexImage>>.init(withCount: 3, factoryFunction: { () -> MetalBuffer<VertexImage> in
             let buffer = MetalBuffer<VertexImage>(vertices: [], mtlDevice: _device)
             return buffer
         })
+        
         
         // create a new command queue
         _commandQueue = _device.makeCommandQueue()
@@ -191,12 +129,12 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         // allocate a number of buffers in memory that matches the sempahore count so that
         // we always have one self contained memory buffer for each buffered frame.
         // In this case triple buffering is the optimal way to go so we cycle through 3 memory buffers
-        var verticesInfos = VertexInfos(width: Float(view.bounds.width), height: Float(view.bounds.height))
-        _verticesInfosBuffer = _device.makeBuffer(
-            bytes: &verticesInfos,
-            length: MemoryLayout<VertexInfos>.size,
-            options: .storageModeShared
-        )
+//        var verticesInfos = VertexInfos(width: Float(view.bounds.width), height: Float(view.bounds.height))
+//        _verticesInfosBuffer = _device.makeBuffer(
+//            bytes: &verticesInfos,
+//            length: MemoryLayout<VertexInfos>.size,
+//            options: .storageModeShared
+//        )
     }
     @available(iOS 13.0, *)
     
@@ -252,10 +190,15 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
     //MARK: Render
     
     @available(iOS 13.0, *)
-    func render(_ view: View,imageFlow:ImageFlowManager) {
+    func render(_ view: View,imageFlow:alternateFlowManager) {
+        length=imageFlow.imageVertices.count
         guard length > 0 else {
             return
         }
+        vertexBuffer = bufferPool?.dequeueItem()
+        vertexBuffer?.set(imageFlow.imageVertices)
+        print("🔴 DEQUEUE UUID", vertexBuffer!.uuid.suffix(4), "incoming points:", length, vertexBuffer!.count)
+        
         // Allow the renderer to preflight 3 frames on the CPU (using a semapore as a guard) and commit them to the GPU.
         // This semaphore will get signaled once the GPU completes a frame's work via addCompletedHandler callback below,
         // signifying the CPU can go ahead and prepare another frame.
@@ -277,10 +220,11 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
             renderEncoder?.setVertexBuffer(mvpBuffer, offset: 0, index: 1)
 
             
-                
+            guard let verticesBuffer = vertexBuffer else { return }
+
           
                 // Set the properties on the encoder for this element and the brush it uses specifically.
-            renderEncoder?.setVertexBuffer(_verticesImageBuffer, offset: 0, index: 0)
+            renderEncoder?.setVertexBuffer(verticesBuffer.buffer, offset: 0, index: 0)
             renderEncoder?.setFragmentTexture(texture, index: 0)
              func buildSampleState(device: MTLDevice?) -> MTLSamplerState? {
                 let sd = MTLSamplerDescriptor()
@@ -314,25 +258,20 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         // call the view's completion handler which is required by the view since it will signal its semaphore and set up the next buffer
         let block_sema = _inflight_semaphore
         commandBuffer?.addCompletedHandler{buffer in
-//            self.resetFlow(imageFlow)
-
-            // GPU has completed rendering the frame and is done using the contents of any buffers previously encoded on the CPU for that frame.
-            // Signal the semaphore and allow the CPU to proceed and construct the next frame.
+            self.bufferPool?.enqueueItem(self.vertexBuffer!)
+            self.clearFlow(imageFlow,length: self.length)
+            print("🔴 ENQUEUE UUID", self.vertexBuffer!.uuid.suffix(4), "Length", self.length, "Buffer Count", self.vertexBuffer!.count, "Current Points Count")
             block_sema.signal()
         }
         
         // finalize rendering here. this will push the command buffer to the GPU
         commandBuffer?.commit()
-        
-
+        commandBuffer?.waitUntilCompleted()
     }
     
     @available(iOS 13.0, *)
     func reshape(_ view: View) {
         // when reshape is called, update the view and projection matricies since this means the view orientation or size changed
-        let aspect = Float(abs(view.bounds.size.width / view.bounds.size.height))
-        _projectionMatrix = AAPL.perspective_fov(kFOVY, aspect, 0.1, 100.0)
-        _viewMatrix = AAPL.lookAt(kEye, kCenter, kUp)
     }
     
 
@@ -342,23 +281,23 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
     
     // just use this to update app globals
     @available(iOS 13.0, *)
-    func updateFlow(_ flowManager: ImageFlowManager) {
-        if flowManager.imageVertices.count>0{
-////
+    func updateFlow(_ flowManager: alternateFlowManager) {
+//        if flowManager.imageVertices.count>0{
+//////
 //            vertexBuffer = bufferPool?.dequeueItem()
-////            print(flowManager.imageVertices.count)
 //            vertexBuffer?.set(flowManager.imageVertices)
+////
+////            print(flowManager.imageVertices.count,"vertices are")
+//            length=flowManager.imageVertices.count
+////            _verticesImageBuffer=vertexBuffer
+////            _verticesImageBuffer = _device?.makeBuffer(
+////                bytes: flowManager.imageVertices,
+////                length: flowManager.imageVertices.count * MemoryLayout<VertexImage>.stride,
+////                options: .cpuCacheModeWriteCombined
+////            )
 //
-//            print(flowManager.imageVertices.count,"vertices are")
-            length=flowManager.imageVertices.count
-            _verticesImageBuffer = _device?.makeBuffer(
-                bytes: flowManager.imageVertices,
-                length: flowManager.imageVertices.count * MemoryLayout<VertexImage>.stride,
-                options: .cpuCacheModeWriteCombined
-            )
-            
-//            flowManager.clearInit()
-        }
+////            flowManager.clearInit()
+//        }
     }
     func updateVertices(_ viewController: ViewController, vertex: Any!) {
         _imageVertices.append(vertex as! VertexImage)
@@ -375,15 +314,15 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         _imageVertices=[]
         
     }
-    func resetFlow(_ flowManager: ImageFlowManager) {
+    func resetFlow(_ flowManager: alternateFlowManager) {
 //        return
         flowManager.stop()
         
     }
     
-    func clearFlow(_ flowManager: ImageFlowManager) {
+    func clearFlow(_ flowManager: alternateFlowManager,length:Int) {
 //        return
-        flowManager.clearInit()
+        flowManager.clearInit(length: length)
         
     }
   
