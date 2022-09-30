@@ -13,7 +13,7 @@ import simd
 
 /** Data structure that goes directly to the shader functions. Do not change the order of the variables without
  also changing the order int he Shader.metal file. */
-struct VertexImage: Codable {
+struct VertexImage: Codable,Hashable {
     
     // MARK: Variables (IMPORTANT: DO NOT change the order of these variables)
     

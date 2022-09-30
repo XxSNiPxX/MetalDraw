@@ -55,9 +55,15 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
     private var finalRenderTexture: MTLTexture!
 
     private var length: Int = 0
+    private var startVertex:Int=0
+    private var endVertex:Int=0
+
     private var bufferPool: LockableBufferPool<MetalBuffer<VertexImage>>?
     private var vertexBuffer: MetalBuffer<VertexImage>?
+    
+    private var globalHistoryVertice:[VertexImage]=[]
 
+    var counter:Int?
 
     // this value will cycle from 0 to g_max_inflight_buffers whenever a display completes ensuring renderer clients
     // can synchronize between g_max_inflight_buffers count buffers, and thus avoiding a constant buffer from being overwritten between draws
@@ -65,6 +71,7 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
     
     override init() {
         super.init()
+        counter=0
     }
     
     //MARK: Configure
@@ -191,13 +198,38 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
     
     @available(iOS 13.0, *)
     func render(_ view: View,imageFlow:alternateFlowManager) {
-        length=imageFlow.imageVertices.count
+
+        let temp=imageFlow.getVertices(counter: counter!)
+        if(temp.count>1){
+            print(temp,"TEMP IS AFETER CALLING VERICES")
+
+        }
+        var verticesToAppend:[VertexImage]=[]
+        if(temp==[]){
+            return
+
+        }else{
+      
+            counter=temp.count
+
+        }
+
+
+        length=temp.count
+        print(temp.count,"ELEMNTS TO RENDER ARE")
         guard length > 0 else {
             return
         }
-        vertexBuffer = bufferPool?.dequeueItem()
-        vertexBuffer?.set(imageFlow.imageVertices)
-        print("🔴 DEQUEUE UUID", vertexBuffer!.uuid.suffix(4), "incoming points:", length, vertexBuffer!.count)
+                    _verticesImageBuffer = _device?.makeBuffer(
+                        bytes: temp,
+                        length: temp.count * MemoryLayout<VertexImage>.stride,
+                        options: .cpuCacheModeWriteCombined
+                    )
+//
+//        vertexBuffer = bufferPool?.dequeueItem()
+////        print("🔴 DEQUEUE UUID", vertexBuffer!.uuid.suffix(4), "incoming points:", length, vertexBuffer!.count)
+//
+//        vertexBuffer?.set(temp)
         
         // Allow the renderer to preflight 3 frames on the CPU (using a semapore as a guard) and commit them to the GPU.
         // This semaphore will get signaled once the GPU completes a frame's work via addCompletedHandler callback below,
@@ -220,11 +252,11 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
             renderEncoder?.setVertexBuffer(mvpBuffer, offset: 0, index: 1)
 
             
-            guard let verticesBuffer = vertexBuffer else { return }
+//            guard let verticesBuffer = vertexBuffer else { return }
 
           
                 // Set the properties on the encoder for this element and the brush it uses specifically.
-            renderEncoder?.setVertexBuffer(verticesBuffer.buffer, offset: 0, index: 0)
+            renderEncoder?.setVertexBuffer(_verticesImageBuffer, offset: 0, index: 0)
             renderEncoder?.setFragmentTexture(texture, index: 0)
              func buildSampleState(device: MTLDevice?) -> MTLSamplerState? {
                 let sd = MTLSamplerDescriptor()
@@ -258,15 +290,20 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         // call the view's completion handler which is required by the view since it will signal its semaphore and set up the next buffer
         let block_sema = _inflight_semaphore
         commandBuffer?.addCompletedHandler{buffer in
-            self.bufferPool?.enqueueItem(self.vertexBuffer!)
-            self.clearFlow(imageFlow,length: self.length)
-            print("🔴 ENQUEUE UUID", self.vertexBuffer!.uuid.suffix(4), "Length", self.length, "Buffer Count", self.vertexBuffer!.count, "Current Points Count")
+            
+
+//            print("🔴 ENQUEUE UUID", self.vertexBuffer!.uuid.suffix(4), "Length", self.length, "Buffer Count", self.vertexBuffer!.count, "Current Points Count")
+//            self.bufferPool?.enqueueItem(self.vertexBuffer!)
+    
+            self.clearFlow(imageFlow,length: self.counter!)
+
+            
+     
             block_sema.signal()
         }
         
         // finalize rendering here. this will push the command buffer to the GPU
         commandBuffer?.commit()
-        commandBuffer?.waitUntilCompleted()
     }
     
     @available(iOS 13.0, *)
@@ -317,6 +354,7 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
     func resetFlow(_ flowManager: alternateFlowManager) {
 //        return
         flowManager.stop()
+        counter=0
         
     }
     

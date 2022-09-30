@@ -57,7 +57,6 @@
 //                    let interpolationB = getKeyVertex(1)!
 //                    let interpolationA = getKeyVertex(2) ?? interpolationB
 //                    let beforeInterpolation = getKeyVertex(3) ?? vertex
-//                    let beforeInterpolation = getKeyVertex(3) ?? vertex
 //    //                add(vertex,vertex.point_size)
 //                                        interpolateCatmullRom(
 //                                            beforeInterpolation,
@@ -84,7 +83,7 @@
 //    
 //    
 ////    func pendingPoints() -> [VertexImage] {
-////        
+////
 ////    }
 //    
 //    func stop() {

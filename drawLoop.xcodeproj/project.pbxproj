@@ -28,7 +28,7 @@
 		1473B0EF28CB225E0053E3BA /* SharedTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B0EE28CB225E0053E3BA /* SharedTypes.swift */; };
 		1473B0F128CB22880053E3BA /* APPL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B0F028CB22880053E3BA /* APPL.swift */; };
 		1473B0F428CB22E20053E3BA /* Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B0F328CB22E20053E3BA /* Transforms.swift */; };
-		1473B0F928CB4DF60053E3BA /* Renderer_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B0F828CB4DF50053E3BA /* Renderer_.swift */; };
+		1473B0F928CB4DF60053E3BA /* Renderer_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B0F828CB4DF50053E3BA /* Renderer_.swift */; };
 		1473B0FB28CB519E0053E3BA /* Shader_.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1473B0FA28CB519E0053E3BA /* Shader_.metal */; };
 		1473B0FD28CB54CE0053E3BA /* VertexImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B0FC28CB54CD0053E3BA /* VertexImage.swift */; };
 		1473B0FF28CB57670053E3BA /* UITouch+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B0FE28CB57670053E3BA /* UITouch+Extension.swift */; };
@@ -86,7 +86,7 @@
 		1473B0F028CB22880053E3BA /* APPL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APPL.swift; sourceTree = "<group>"; };
 		1473B0F328CB22E20053E3BA /* Transforms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transforms.swift; sourceTree = "<group>"; };
 		1473B0F728CB2F170053E3BA /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
-		1473B0F828CB4DF50053E3BA /* Renderer_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer_.swift; sourceTree = "<group>"; };
+		1473B0F828CB4DF50053E3BA /* Renderer_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Renderer_\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003\U0003.swift"; sourceTree = "<group>"; };
 		1473B0FA28CB519E0053E3BA /* Shader_.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader_.metal; sourceTree = "<group>"; };
 		1473B0FC28CB54CD0053E3BA /* VertexImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexImage.swift; sourceTree = "<group>"; };
 		1473B0FE28CB57670053E3BA /* UITouch+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITouch+Extension.swift"; sourceTree = "<group>"; };
@@ -139,7 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				1456DE2C28CF09D5000AD31A /* ImageFlowManager.swift */,
-				1473B0F828CB4DF50053E3BA /* Renderer_.swift */,
+				1473B0F828CB4DF50053E3BA /* Renderer_.swift */,
 				E7A062D428E46AAA006A1CE4 /* alternateFlowManager.swift */,
 			);
 			path = Renderer;
@@ -413,7 +413,7 @@
 				1473B0BA28CB14460053E3BA /* AppDelegate.swift in Sources */,
 				1473B0FB28CB519E0053E3BA /* Shader_.metal in Sources */,
 				1456DE4428D1F52B000AD31A /* MetalBuffer.swift in Sources */,
-				1473B0F928CB4DF60053E3BA /* Renderer_.swift in Sources */,
+				1473B0F928CB4DF60053E3BA /* Renderer_.swift in Sources */,
 				1473B0FF28CB57670053E3BA /* UITouch+Extension.swift in Sources */,
 				1456DE4228D1F4FE000AD31A /* LockableBufferPool.swift in Sources */,
 				1456DE4028D1F4A8000AD31A /* RoundRobinPool.swift in Sources */,

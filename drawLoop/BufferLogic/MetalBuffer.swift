@@ -12,7 +12,7 @@
 //
 
 import Metal
-private let defaultIncrement: Int = 1000
+private let defaultIncrement: Int = 6000
 
 class MetalBuffer<T> : RoundRobinConfirm,Equatable {
     public static func == (lhs: MetalBuffer<T>, rhs: MetalBuffer<T>) -> Bool {
@@ -80,7 +80,7 @@ class MetalBuffer<T> : RoundRobinConfirm,Equatable {
 
 
     public func set(_ vertices: [T]) {
-        print("🔴 😆 Vertex Count", vertices.count, "capacity", self.capacity)
+//        print("🔴 😆 Vertex Count", vertices.count, "capacity", self.capacity)
         if vertices.count <= self.capacity {
             memcpy(self.buffer.contents(), vertices, vertices.count*MemoryLayout<T>.stride);
             self.count = vertices.count

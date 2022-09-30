@@ -1,8 +1,10 @@
 //
-//  alternateFlowManager.swift
+//  ImageFlowManager.swift
 //  drawLoop
 //
-//  Created by FluidTouch on 28/09/22.
+//  Created by Rishabh Natarajan on 12/09/22.
+//
+//
 
 
 
@@ -22,32 +24,75 @@ import MetalKit
 @objc(alternateFlowManager)
 class alternateFlowManager: NSObject {
     var indices: [UInt32] = []
-    var vertices: [CGPoint] = []
-    var imageVertices: [VertexImage] = []
+    var vertices: [VertexImage] = []
+     var imageVertices: [VertexImage] = []
     var minimumNorm: Float = 1
     var minimumNormKeyVertex: Float = 0
     var minimumAngle: Float = 0.15
-    var interpolationDivider: Float = 1 // Higher -> use more RAM
-    private var _keyVertices: [CGPoint] = []
+    var interpolationDivider: Float = 10// Higher -> use more RAM
+    private var _keyVertices: [VertexImage] = []
     private var _interpolationPipelineState: MTLComputePipelineState!
     private var _device: MTLDevice!
     private var _lastVertex: VertexImage?
     private var config:AppConfig?
-    private var size:Float?
+     var llen:Int?
+
     
     override init() {
         super.init()
         config=AppConfig()
+        llen=0
         stop()
 
     }
     
-    func addKeyVertex(_ vertex: CGPoint,point_size:Float) {
-//         imageVertices.append(vertex)
+    func getVertices(counter:Int)->[VertexImage] {
+        var verticesToAppend:[VertexImage]=[]
+        print((imageVertices.count," "))
+        if(counter==0||counter==imageVertices.count){
+            return imageVertices
+
+        }else{
+            print("COUNTER IS:",counter, "Image vertices are:",imageVertices.count)
+
+            verticesToAppend = Array(imageVertices[counter...imageVertices.count-1])
+            print("VERTICS THAT NEED TO BE ADDED ARE:",verticesToAppend.count)
+            return verticesToAppend
+
+
+        }
+//        print(start,end,"LENGTH IS",llen,"IMAGE VERTICE SARE")
+//        if(start==0&&end==0){
+//            return imageVertices
+//        }
+//        else{
+//            if(end==imageVertices.count){
+//                return Array([])
+//            }else{
+//                let tempVert=imageVertices[end...imageVertices.count-1]
+//                    return imageVertices
+//            }
+//
+//
+//
+//
+//        }
+   
+    }
+    
+    func addKeyVertex(_ vertex: VertexImage) {
+        print(vertex.point_size)
+        if(vertex.color==UIColor.black){
+            print("BLAVK BBY")
+        }
+//         imageVertices.append(vertex)w1
 //        return;
-        let normOkay = true
-        
-        size=point_size
+        var normOkay = true
+//
+        if _keyVertices.count >= 2 {
+            print("NORM BETWEEN TWO POIBTS:" ,Vector(getKeyVertex(0)!, vertex).norm)
+//                   normOkay = Vector(getKeyVertex(0)!, vertex).norm > minimumNormKeyVertex
+               }
         if normOkay {
             appendAndMaintainArrayLength(&_keyVertices, vertex, length: 4)
             if((config?.catmullLogic) != false){
@@ -55,16 +100,70 @@ class alternateFlowManager: NSObject {
                     let interpolationB = getKeyVertex(1)!
                     let interpolationA = getKeyVertex(2) ?? interpolationB
                     let beforeInterpolation = getKeyVertex(3) ?? vertex
+             
     //                add(vertex,vertex.point_size)
+                    print("CALCULATING CATMULL")
                                         interpolateCatmullRom(
                                             beforeInterpolation,
                                             interpolationA,
                                             interpolationB,
                                             vertex
                                         )
+                }else{
+                    if(_keyVertices.count>1){
+                        let p1 = getKeyVertex(1)!
+                        let p2 = getKeyVertex(2) ?? p1
+                        func intermediates(p1:CGPoint, p2:CGPoint, nb_points:Int)->[CGPoint]{
+                            var out:[CGPoint] = [];
+                            let x_spacing = (p2.x - p1.x) / CGFloat(nb_points + 1)
+                            let y_spacing = (p2.y - p1.y) / CGFloat(nb_points + 1)
+                       
+                                for i in 1...nb_points{
+                                    
+                                        out.append(CGPoint(x:p1.x+CGFloat(i)*x_spacing,y:p1.y+CGFloat(i)*y_spacing))
+                                    
+                                }
+                            
+                            
+                            return out
+                            
+                        }
+                        func distanceBetween(point1:CGPoint, point2:CGPoint)->CGFloat {
+                            return CGFloat(sqrt(pow(point2.x - point1.x, 2) + pow(point2.y - point1.y, 2)));
+                        }
+                        var cg1 = CGPoint(x:CGFloat(p1.position.x),y:CGFloat(p1.position.y))
+                        var cg2 = CGPoint(x:CGFloat(p2.position.x),y:CGFloat(p2.position.y))
+
+                        let kkk=distanceBetween(point1:cg1,point2: cg2)
+
+                        let res=intermediates(p1: cg1, p2: cg2, nb_points:50  )
+                        
+                        for cg in res{
+                            print("GENERATED")
+                            _lastVertex = VertexImage(
+                                position: cg,
+                                size: CGFloat(p2.point_size),
+                                color: UIColor.blue,
+                                rotation: 0
+                            )
+                            addImageVertices(_lastVertex! )
+
+
+
+                        appendAndMaintainArrayLength(&imageVertices, vertex, length: 3)
+
+                        }
+                        
+                        
+                    }
+                    else{
+                        add(vertex, vertex.point_size)
+
+                    }
+                    
                 }
             }else{
-                add(vertex)
+                add(vertex, vertex.point_size)
             }
    
             
@@ -72,11 +171,33 @@ class alternateFlowManager: NSObject {
     }
     
     func clearInit(length:Int){
-        if length != imageVertices.count {
-            print("😆",length,imageVertices.count,"LENGTH IUSS")
-        }
+//        if llen != length {
+//            print("😆",llen,imageVertices.count,"LENGTH IUSS")
+//        }
        // TODO: identify the vertices, which got rendered and cleared.
-        imageVertices=imageVertices.suffix(45)
+//        imageVertices=imageVertices.suffix(0)
+//        imageVertices=imageVertices.suffix(4)
+//        print(imageVertices.count,"CPUNNTTT")
+return
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
     
     
@@ -85,18 +206,16 @@ class alternateFlowManager: NSObject {
 //    }
     
     func stop() {
-
-
+        print(llen)
+        llen=0
         imageVertices.removeAll()
         _keyVertices.removeAll()
         _lastVertex = nil
     }
     
-    private func add(_ vertex: CGPoint,_ index: Int? = nil) {
+    private func add(_ vertex: VertexImage,_ size:Float ,_ index: Int? = nil) {
         let normOkay = true
         let angleOkay = true
-       
-        
 //
 
         if normOkay && angleOkay {
@@ -109,20 +228,17 @@ class alternateFlowManager: NSObject {
                 ])
             }
             
-            if
-                let previousVertex = getVertex(2),
-                let concernedVertex = getVertex(1)
-            {
+         
 
       
                 //State machine must start here
-                let cg=CGPoint(x: CGFloat(vertex.x), y:CGFloat(vertex.y))
+                let cg=CGPoint(x: CGFloat(vertex.position.x), y:CGFloat(vertex.position.y))
                 
                 
                 //This is triangle based logic handling
                 _lastVertex = VertexImage(
                     position: cg,
-                    size: CGFloat(size!),
+                    size: CGFloat(size)+10,
                     color: UIColor.red,
                     rotation: 0
                 )
@@ -131,11 +247,9 @@ class alternateFlowManager: NSObject {
 //                if newFlow {
 //                    // ...
 //                }
-            }
             
-            appendAndMaintainArrayLength(&_keyVertices, vertex, length: 3)
 
-
+            appendAndMaintainArrayLength(&imageVertices, vertex, length: 3)
         }
     }
     
@@ -148,11 +262,12 @@ class alternateFlowManager: NSObject {
     
     private func addImageVertices(_ vertice: VertexImage, _ indexes: [Int] = []) {
         indices.append(contentsOf: indexes.map{ UInt32($0) })
+        llen=llen!+1
         imageVertices.append(vertice)
 //        print(imageVertices.count)
     }
     
-    private func getKeyVertex(_ indexFromEnd: Int) -> CGPoint? {
+    private func getKeyVertex(_ indexFromEnd: Int) -> VertexImage? {
         return getArraySafe(_keyVertices, indexFromEnd)
     }
     
@@ -170,29 +285,31 @@ class alternateFlowManager: NSObject {
         return nil
     }
     
-    private func interpolateCatmullRom(_ p0: CGPoint, _ p1: CGPoint, _ p2: CGPoint, _ p3: CGPoint) {
-        let vBC = VectorCG(p1, p2)
-        let vBA = VectorCG(p1, p0)
+    private func interpolateCatmullRom(_ p0: VertexImage, _ p1: VertexImage, _ p2: VertexImage, _ p3: VertexImage) {
+        let vBC = Vector(p1, p2)
+        let vBA = Vector(p1, p0)
         let angle = vBA.angleDeg(with: vBC)
 
         // More points when the angle is bigger
         let to = ((vBC.norm / interpolationDivider) * (1 + angle / 10)).rounded(.up)
-        print(to,"TO IS")
-        var i: Float = to
+        var i: Float = to+1
         while i >= 0 {
             let t = 1 - i / to
             
-            let x = catmullRom(t, Float(p0.x), Float(p1.x), Float(p2.x), Float(p3.x))
-            let y = catmullRom(t, Float(p0.y), Float(p1.y), Float(p2.y), Float(p3.y))
-            let cg=CGPoint(x: CGFloat(x), y:CGFloat(y))
-      
-
+            let x = catmullRom(t, p0.position.x, p1.position.x, p2.position.x, p3.position.x)
+            let y = catmullRom(t, p0.position.y, p1.position.y, p2.position.y, p3.position.y)
+            
+            var vertex = p1
+            vertex.position = [x, y]
 //            print(vertex,i)
-                    
-            add(cg)
+            if(p3.point_size<=0){
+                print("SOME ISSUE")
+            }
+            add(vertex,p3.point_size)
 
             i -= 1
         }
+        print("CATMULL DONW:",imageVertices.count)
     }
     
     private func catmullRom(_ t: Float, _ p0: Float, _ p1: Float, _ p2: Float, _ p3: Float) -> Float {
@@ -206,8 +323,9 @@ class alternateFlowManager: NSObject {
 }
 
 
-//func norm(startVertex:VertexImage,endVertex:VertexImage) -> Float {
-//    let x = endVertex.position.x - startVertex.position.x
-//    let y = endVertex.position.y - startVertex.position.y
-//    return sqrt(pow(x, 2) + pow(y, 2))
-//}
+func norm(startVertex:VertexImage,endVertex:VertexImage) -> Float {
+    let x = endVertex.position.x - startVertex.position.x
+    let y = endVertex.position.y - startVertex.position.y
+    return sqrt(pow(x, 2) + pow(y, 2))
+}
+

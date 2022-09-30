@@ -53,11 +53,11 @@ class ViewController: BaseViewController {
     // What vsync refresh interval to fire at. (Sets CADisplayLink frameinterval property)
     // set to 1 by default, which is the CADisplayLink default setting (60 FPS).
     // Setting to 2, will cause gameloop to trigger every other vsync (throttling to 30 FPS)
-    var interval: Int = 0
+    var interval: Int = 1
     private var _imageFlowManager: alternateFlowManager!
 
     // app control
-    
+    private var sizeOfTouch:CGFloat=CGFloat(1)
 
     private var _displayLink: CADisplayLink?
 
@@ -94,7 +94,7 @@ class ViewController: BaseViewController {
         // create a game loop timer using a display link
         _displayLink = UIScreen.main.displayLink(withTarget: self,
             selector: #selector(ViewController.gameloop))
-//        _displayLink?.frameInterval = interval
+        _displayLink?.frameInterval = interval
         _displayLink?.add(to: RunLoop.main,
             forMode: RunLoop.Mode.default)
     }
@@ -173,11 +173,17 @@ class ViewController: BaseViewController {
             
             // keep track of the time interval between draws
             _timeSinceLastDrawPreviousTime = currentTime
-//            if((Int(currentTime)%10) == 0){
-//                print("inside the multiple of 3")
-//                self.delegate?.clearFlow(_imageFlowManager)
+            
+//            if((Int(currentTime)%2) == 0){
+//                
+//                       let nc = NotificationCenter.default
+//                        nc.post( name: UIApplication.didEnterBackgroundNotification, object: nil)
+//                //        nc.post( name: UIApplication.willEnterForegroundNotification, object: nil)
 //
-//
+//            }else{
+//                let nc = NotificationCenter.default
+//                 //nc.post( name: UIApplication.didEnterBackgroundNotification, object: nil)
+//                 nc.post( name: UIApplication.willEnterForegroundNotification, object: nil)
 //            }
 
             
@@ -263,8 +269,36 @@ class ViewController: BaseViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        touchFunction(touches, with: event)
+//        touchFunction(touches, with: event)
+        print("TOUCH START")
+        var coalescedPoints: [UITouch] = []
+        if let coalesced = event?.coalescedTouches(for: touches.first!) {
+            coalescedPoints.append(contentsOf: coalesced)
+        }
+        for touch in coalescedPoints {
+      
+            if(touch.force>0){
+                sizeOfTouch=touch.force
+                
+            }else{
+                print("ITS zero in began",sizeOfTouch)
+            }
+            let point = touch.preciseLocation(in: view);
+            let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
+            let vertex=VertexImage(
+                position: cg,
+                size: 30 * sizeOfTouch  ,//* touch.force,
+                color: UIColor.green,
+                rotation: 0
+            )
+            _imageFlowManager.addKeyVertex(vertex)
 
+//            _imageFlowManager.addKeyVertex(cg, point_size: 40 * Float(touch.force))
+//            self.delegate?.updateFlow(_imageFlowManager)
+
+//            self.delegate?.updateVertices(self,vertex: vertex)
+
+        }
 
 
 //        self.delegate?.render(renderView)
@@ -272,8 +306,35 @@ class ViewController: BaseViewController {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        touchFunction(touches, with: event)
+        var coalescedPoints: [UITouch] = []
+        if let coalesced = event?.coalescedTouches(for: touches.first!) {
+            coalescedPoints.append(contentsOf: coalesced)
+        }
+        for touch in touches {
+      
+            if(touch.force>0){
+                sizeOfTouch=touch.force
+                
+            }else{
+                print("ITS zero moved",sizeOfTouch)
+            }
+            let point = touch.preciseLocation(in: view);
+            let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
+            let vertex=VertexImage(
+                position: cg,
+                size: 20 * sizeOfTouch  ,//* touch.force,
+                color: UIColor.yellow,
+                rotation: 0
+            )
+            _imageFlowManager.addKeyVertex(vertex)
 
-        touchFunction(touches, with: event)
+//            _imageFlowManager.addKeyVertex(cg, point_size: 40 * Float(touch.force))
+//            self.delegate?.updateFlow(_imageFlowManager)
+
+//            self.delegate?.updateVertices(self,vertex: vertex)
+
+        }
 
 
 //        self.delegate?.render(renderView)
@@ -281,9 +342,9 @@ class ViewController: BaseViewController {
 
 
     }
-    var i=0;
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)  {
-        i=0
+     
          touchFunction(touches, with: event)
 
 
@@ -303,18 +364,27 @@ extension ViewController{
 //        if let coalesced = event?.coalescedTouches(for: touches.first!) {
 //            coalescedPoints.append(contentsOf: coalesced)
 //        }
+
         
         for touch in touches {
+      
+            if(touch.force>0){
+                sizeOfTouch=touch.force
+                
+            }else{
+                print("ITS zero INSEW ENDEDDD",sizeOfTouch)
+            }
             let point = touch.preciseLocation(in: view);
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
-//            let vertex=VertexImage(
-//                position: cg,
-//                size: 40 * touch.force  ,//* touch.force,
-//                color: UIColor.black,
-//                rotation: 0
-//            )
-   
-            _imageFlowManager.addKeyVertex(cg, point_size: 40 * Float(touch.force))
+            let vertex=VertexImage(
+                position: cg,
+                size: 80 * sizeOfTouch  ,//* touch.force,
+                color: UIColor.black,
+                rotation: 0
+            )
+            _imageFlowManager.addKeyVertex(vertex)
+
+//            _imageFlowManager.addKeyVertex(cg, point_size: 40 * Float(touch.force))
 //            self.delegate?.updateFlow(_imageFlowManager)
 
 //            self.delegate?.updateVertices(self,vertex: vertex)
