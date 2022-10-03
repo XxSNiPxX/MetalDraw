@@ -27,13 +27,13 @@ protocol ViewControllerDelegate: NSObjectProtocol {
     func resetVertices(_ viewController: ViewController)
     
     @available(iOS 13.0, *)
-    func updateFlow(_ flowManager: alternateFlowManager)
+    func updateFlow(_ flowManager: FlowManager)
     
     @available(iOS 13.0, *)
-    func resetFlow(_ flowManager: alternateFlowManager)
+    func resetFlow(_ flowManager: FlowManager)
     
     @available(iOS 13.0, *)
-    func clearFlow(_ flowManager: alternateFlowManager,length:Int)
+    func clearFlow(_ flowManager: FlowManager,length:Int)
 //    
     @available(iOS 13.0, *)
     func render(_ view: View)
@@ -54,7 +54,7 @@ class ViewController: BaseViewController {
     // set to 1 by default, which is the CADisplayLink default setting (60 FPS).
     // Setting to 2, will cause gameloop to trigger every other vsync (throttling to 30 FPS)
     var interval: Int = 1
-    private var _imageFlowManager: alternateFlowManager!
+    private var _imageFlowManager: FlowManager!
 
     // app control
     private var sizeOfTouch:CGFloat=CGFloat(1)
@@ -104,7 +104,7 @@ class ViewController: BaseViewController {
     
     private func initCommon() {
         _renderer = Renderer_()
-        _imageFlowManager = alternateFlowManager()
+        _imageFlowManager = FlowManager()
         config=AppConfig()
         self.delegate = _renderer
             let notificationCenter = NotificationCenter.default
@@ -270,7 +270,8 @@ class ViewController: BaseViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 //        touchFunction(touches, with: event)
-        print("TOUCH START")
+        let nc = NotificationCenter.default
+        nc.post( name: UIApplication.willEnterForegroundNotification, object: nil)
         var coalescedPoints: [UITouch] = []
         if let coalesced = event?.coalescedTouches(for: touches.first!) {
             coalescedPoints.append(contentsOf: coalesced)
@@ -285,13 +286,9 @@ class ViewController: BaseViewController {
             }
             let point = touch.preciseLocation(in: view);
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
-            let vertex=VertexImage(
-                position: cg,
-                size: 30 * sizeOfTouch  ,//* touch.force,
-                color: UIColor.green,
-                rotation: 0
-            )
-            _imageFlowManager.addKeyVertex(vertex)
+            print(cg,"CG IN TOUCHES BEGAN", 90 * sizeOfTouch)
+
+            _imageFlowManager.addCGPoint(cg, Float(sizeOfTouch),color: UIColor.blue)
 
 //            _imageFlowManager.addKeyVertex(cg, point_size: 40 * Float(touch.force))
 //            self.delegate?.updateFlow(_imageFlowManager)
@@ -327,7 +324,8 @@ class ViewController: BaseViewController {
                 color: UIColor.yellow,
                 rotation: 0
             )
-            _imageFlowManager.addKeyVertex(vertex)
+            _imageFlowManager.addCGPoint(cg, Float(sizeOfTouch),color: UIColor.red)
+
 
 //            _imageFlowManager.addKeyVertex(cg, point_size: 40 * Float(touch.force))
 //            self.delegate?.updateFlow(_imageFlowManager)
@@ -344,7 +342,9 @@ class ViewController: BaseViewController {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)  {
-     
+                let nc = NotificationCenter.default
+        nc.post( name: UIApplication.didEnterBackgroundNotification, object: nil)
+
          touchFunction(touches, with: event)
 
 
@@ -353,6 +353,7 @@ class ViewController: BaseViewController {
 //        self.delegate?.resetVertices(self)
         self.delegate?.resetFlow(_imageFlowManager)
      //   self.delegate?.clearFlow(_imageFlowManager)
+        
         
     }
     
@@ -378,11 +379,11 @@ extension ViewController{
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
             let vertex=VertexImage(
                 position: cg,
-                size: 80 * sizeOfTouch  ,//* touch.force,
-                color: UIColor.black,
+                size: 90 * sizeOfTouch  ,//* touch.force,
+                color: UIColor.green,
                 rotation: 0
             )
-            _imageFlowManager.addKeyVertex(vertex)
+            _imageFlowManager.addCGPoint(cg, Float(sizeOfTouch),color: UIColor.green)
 
 //            _imageFlowManager.addKeyVertex(cg, point_size: 40 * Float(touch.force))
 //            self.delegate?.updateFlow(_imageFlowManager)

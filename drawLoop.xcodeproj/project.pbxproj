@@ -40,6 +40,7 @@
 		1473B10B28CEF8BE0053E3BA /* FTBlitEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B10A28CEF8BE0053E3BA /* FTBlitEncoder.swift */; };
 		E7A062D528E46AAA006A1CE4 /* alternateFlowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A062D428E46AAA006A1CE4 /* alternateFlowManager.swift */; };
 		E7A062D728E46BC6006A1CE4 /* VectorCG.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A062D628E46BC6006A1CE4 /* VectorCG.swift */; };
+		E7A6E64028EADA3A00B8F6A4 /* FlowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A6E63F28EADA3A00B8F6A4 /* FlowManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +99,7 @@
 		1473B10A28CEF8BE0053E3BA /* FTBlitEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTBlitEncoder.swift; sourceTree = "<group>"; };
 		E7A062D428E46AAA006A1CE4 /* alternateFlowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = alternateFlowManager.swift; sourceTree = "<group>"; };
 		E7A062D628E46BC6006A1CE4 /* VectorCG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorCG.swift; sourceTree = "<group>"; };
+		E7A6E63F28EADA3A00B8F6A4 /* FlowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 				1456DE2C28CF09D5000AD31A /* ImageFlowManager.swift */,
 				1473B0F828CB4DF50053E3BA /* Renderer_.swift */,
 				E7A062D428E46AAA006A1CE4 /* alternateFlowManager.swift */,
+				E7A6E63F28EADA3A00B8F6A4 /* FlowManager.swift */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
@@ -421,6 +424,7 @@
 				1456DE2F28CF0A01000AD31A /* Vector.swift in Sources */,
 				1473B0FD28CB54CE0053E3BA /* VertexImage.swift in Sources */,
 				1473B0BC28CB14460053E3BA /* SceneDelegate.swift in Sources */,
+				E7A6E64028EADA3A00B8F6A4 /* FlowManager.swift in Sources */,
 				1473B0F128CB22880053E3BA /* APPL.swift in Sources */,
 				1456DE3A28D1E6EF000AD31A /* viewData.swift in Sources */,
 			);

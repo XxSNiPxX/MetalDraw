@@ -7,6 +7,4 @@
 struct AppConfig {
     let CADisplaylink=true
     let catmullLogic=true
-    
-    
 }

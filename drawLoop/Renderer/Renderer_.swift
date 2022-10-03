@@ -197,20 +197,17 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
     //MARK: Render
     
     @available(iOS 13.0, *)
-    func render(_ view: View,imageFlow:alternateFlowManager) {
+    func render(_ view: View,imageFlow:FlowManager) {
 
         let temp=imageFlow.getVertices(counter: counter!)
-        if(temp.count>1){
-            print(temp,"TEMP IS AFETER CALLING VERICES")
 
-        }
         var verticesToAppend:[VertexImage]=[]
         if(temp==[]){
             return
 
         }else{
       
-            counter=temp.count
+            counter=counter!+temp.count
 
         }
 
@@ -220,16 +217,16 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         guard length > 0 else {
             return
         }
-                    _verticesImageBuffer = _device?.makeBuffer(
-                        bytes: temp,
-                        length: temp.count * MemoryLayout<VertexImage>.stride,
-                        options: .cpuCacheModeWriteCombined
-                    )
+//                    _verticesImageBuffer = _device?.makeBuffer(
+//                        bytes: temp,
+//                        length: temp.count * MemoryLayout<VertexImage>.stride,
+//                        options: .cpuCacheModeWriteCombined
+//                    )
 //
-//        vertexBuffer = bufferPool?.dequeueItem()
-////        print("🔴 DEQUEUE UUID", vertexBuffer!.uuid.suffix(4), "incoming points:", length, vertexBuffer!.count)
-//
-//        vertexBuffer?.set(temp)
+        vertexBuffer = bufferPool?.dequeueItem()
+//        print("🔴 DEQUEUE UUID", vertexBuffer!.uuid.suffix(4), "incoming points:", length, vertexBuffer!.count)
+
+        vertexBuffer?.set(temp)
         
         // Allow the renderer to preflight 3 frames on the CPU (using a semapore as a guard) and commit them to the GPU.
         // This semaphore will get signaled once the GPU completes a frame's work via addCompletedHandler callback below,
@@ -256,7 +253,7 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
 
           
                 // Set the properties on the encoder for this element and the brush it uses specifically.
-            renderEncoder?.setVertexBuffer(_verticesImageBuffer, offset: 0, index: 0)
+            renderEncoder?.setVertexBuffer(vertexBuffer?.buffer, offset: 0, index: 0)
             renderEncoder?.setFragmentTexture(texture, index: 0)
              func buildSampleState(device: MTLDevice?) -> MTLSamplerState? {
                 let sd = MTLSamplerDescriptor()
@@ -292,10 +289,10 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         commandBuffer?.addCompletedHandler{buffer in
             
 
-//            print("🔴 ENQUEUE UUID", self.vertexBuffer!.uuid.suffix(4), "Length", self.length, "Buffer Count", self.vertexBuffer!.count, "Current Points Count")
-//            self.bufferPool?.enqueueItem(self.vertexBuffer!)
+            print("🔴 ENQUEUE UUID", self.vertexBuffer!.uuid.suffix(4), "Length", self.length, "Buffer Count", self.vertexBuffer!.count, "Current Points Count")
+            self.bufferPool?.enqueueItem(self.vertexBuffer!)
     
-            self.clearFlow(imageFlow,length: self.counter!)
+//            self.clearFlow(imageFlow,length: self.counter!)
 
             
      
@@ -318,7 +315,7 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
     
     // just use this to update app globals
     @available(iOS 13.0, *)
-    func updateFlow(_ flowManager: alternateFlowManager) {
+    func updateFlow(_ flowManager: FlowManager) {
 //        if flowManager.imageVertices.count>0{
 //////
 //            vertexBuffer = bufferPool?.dequeueItem()
@@ -351,16 +348,17 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         _imageVertices=[]
         
     }
-    func resetFlow(_ flowManager: alternateFlowManager) {
+    func resetFlow(_ flowManager: FlowManager) {
 //        return
+        print("________________ENNDDD________________")
         flowManager.stop()
         counter=0
         
     }
     
-    func clearFlow(_ flowManager: alternateFlowManager,length:Int) {
-//        return
-        flowManager.clearInit(length: length)
+    func clearFlow(_ flowManager: FlowManager,length:Int) {
+        return
+//        flowManager.clearInit(length: length)
         
     }
   
