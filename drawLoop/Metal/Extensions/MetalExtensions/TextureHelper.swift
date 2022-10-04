@@ -11,7 +11,16 @@ import AppKit
 #else
 import UIKit
 #endif
+func resizeImage(image: UIImage, newWidth: CGFloat,newHeight: CGFloat) -> UIImage {
 
+
+   UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight))
+    image.draw(in: CGRectMake(0, 0, newWidth, newHeight))
+   let newImage = UIGraphicsGetImageFromCurrentImageContext()
+   UIGraphicsEndImageContext()
+
+    return newImage!
+}
 final class TextureHelper {
 
 //    static func texture(with image:UIImage, multiSample: Bool = false) -> MTLTexture {
@@ -24,16 +33,29 @@ final class TextureHelper {
 //    }
 
 
+    
     static func createTexture(with size: CGSize, device: MTLDevice) -> MTLTexture {
-        let textureDesc = MTLTextureDescriptor()
-        textureDesc.width = Int(size.width*2)
-        textureDesc.height = Int(size.height*2)
-        textureDesc.pixelFormat = .bgra8Unorm
-        textureDesc.usage = [.renderTarget,.shaderRead]
-        guard let texture = device.makeTexture(descriptor: textureDesc) else {
-            fatalError("Unable to create texture")
+        var ttexture:MTLTexture!
+        let textureLoader = MTKTextureLoader(device: device)
+        if let img = UIImage(named: "paper.png") {
+            let temp=resizeImage(image: img, newWidth: CGFloat(Int(size.width*2)), newHeight: CGFloat(Int(size.height*2)))
+            let cg = temp.cgImage
+            ttexture = try! textureLoader.newTexture(cgImage: cg!, options: [
+                MTKTextureLoader.Option.SRGB : false,
+                MTKTextureLoader.Option.textureStorageMode: MTLStorageMode.shared.rawValue
+
+            ])
         }
-        return texture
+//        let textureDesc = MTLTextureDescriptor()
+//        textureDesc.width = Int(size.width*2)
+//        textureDesc.height = Int(size.height*2)
+//        print("HEIGHT AND WIDTH ARE",Int(size.height*2),Int(size.width*2))
+//        textureDesc.pixelFormat = .bgra8Unorm
+//        textureDesc.usage = [.renderTarget,.shaderRead]
+//        guard let texture = device.makeTexture(descriptor: textureDesc) else {
+//            fatalError("Unable to create texture")
+//        }
+        return ttexture
     }
 
 

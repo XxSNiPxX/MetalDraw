@@ -16,6 +16,29 @@ import MetalKit
 
  */
 
+struct SimpleMovingAverage {
+  var period: Int
+  var numbers = [Double]()
+    mutating func clear(){
+        numbers=[]
+    }
+  mutating func addNumber(_ n: Double) -> Double {
+    numbers.append(n)
+
+    if numbers.count > period {
+      numbers.removeFirst()
+    }
+
+    guard !numbers.isEmpty else {
+      return 0
+    }
+      
+    
+
+    return numbers.reduce(0, +) / Double(numbers.count)
+  }
+}
+
 
 
 @objc(FlowManager)
@@ -33,11 +56,13 @@ class FlowManager: NSObject {
     private var _lastVertex: VertexImage?
     private var config:AppConfig?
      var llen:Int?
+    private var prevVertex:Float=0
     private let queue = DispatchQueue(label: "ThreadSafeCollection.queue", attributes: .concurrent)
-
+    private var averager:SimpleMovingAverage?
     
     override init() {
         super.init()
+        averager = SimpleMovingAverage(period: 200)
         config=AppConfig()
         stop()
 
@@ -105,6 +130,9 @@ class FlowManager: NSObject {
                                             color: color
     
                                         )
+                    
+                    
+                    
                 }else{
                     return
 //                    if(_keyVertices.count>1){
@@ -214,6 +242,8 @@ return
 //    }
     
     func stop() {
+        averager?.clear()
+        prevVertex=0
         queue.sync { // Read
             imageVertices.removeAll()
           }
@@ -297,31 +327,35 @@ return
     }
     
     private func interpolateCatmullRom(_ p0: CGPoint, _ p1: CGPoint, _ p2: CGPoint, _ p3: CGPoint,_ point_size:Float,color:UIColor) {
+        
         let vBC = VectorCG(p1, p2)
         let vBA = VectorCG(p1, p0)
         let angle = vBA.angleDeg(with: vBC)
+     
 
         // More points when the angle is bigger
         let to = ((vBC.norm / interpolationDivider) * (1 + angle / 10)).rounded(.up)
         var i: Float = to+1
         while i >= 0 {
+            let temp_size=averager!.addNumber(Double(point_size))
+            print(point_size,temp_size
+                  ,"THE SIZES ARE RESPECTIVELY")
             let t = 1 - i / to
             
             let x = catmullRom(CGFloat(t), p0.x, p1.x, p2.x, p3.x)
             let y = catmullRom(CGFloat(t), p0.y, p1.y, p2.y, p3.y)
             let vertex=VertexImage(
                 position: CGPoint(x: x, y: y),
-                size: 15 * CGFloat(point_size)  ,//* touch.force,
+                size: 4 * CGFloat(temp_size)  ,//* touch.force,
                 color: color,
                 rotation: 0
             )
-            
 //            print(vertex,i)
-
             add(vertex)
 
             i -= 1
         }
+        
         print("CATMULL DONW:",imageVertices.count)
     }
     
@@ -333,6 +367,28 @@ return
         let final = (a * pow(t, 3) + b * pow(t, 2) + c + d)
         return 0.5 * final
     }
+    
+    func calculatePointSize(size:Float,iteration:Int) -> Float{
+        print(size,"SIZE IS")
+
+        if(prevVertex==0){
+            prevVertex=size
+            return prevVertex
+        }
+        else{
+            let diff=prevVertex-size
+            if(abs(diff)>0.5){
+                prevVertex=prevVertex+0.1
+                print(prevVertex,"INSIDE NEW")
+                return size
+            }
+            else{
+              
+                return size
+            }
+        }
+    }
+    
 }
 
 

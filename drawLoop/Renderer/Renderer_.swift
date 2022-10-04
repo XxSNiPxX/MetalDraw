@@ -9,6 +9,7 @@ import UIKit
 import Metal
 import simd
 import MetalKit
+import MetalPerformanceShaders
 
 
 struct VertexInfos {
@@ -279,7 +280,9 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
             FTBlitEncoder.copy(sourceTexture: view.finalRenderTexture!,
                                targetTexture: draww?.texture,
                                commandBuffer: commandBuffer!)
-            
+            let shader = MPSImageGaussianBlur(device: _device!, sigma: 1.0)
+         shader.encode(commandBuffer: commandBuffer!, sourceTexture: view.finalRenderTexture!,
+                       destinationTexture: draww!.texture)
             // schedule a present once rendering to the framebuffer is complete
             commandBuffer?.present(draww!)
         }
@@ -298,7 +301,7 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
      
             block_sema.signal()
         }
-        
+
         // finalize rendering here. this will push the command buffer to the GPU
         commandBuffer?.commit()
     }

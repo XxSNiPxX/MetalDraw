@@ -309,7 +309,10 @@ class ViewController: BaseViewController {
             coalescedPoints.append(contentsOf: coalesced)
         }
         for touch in touches {
-      
+            print(touch.force,"FORCE IS")
+            if(touch.force==0.0){
+                return
+            }
             if(touch.force>0){
                 sizeOfTouch=touch.force
                 
@@ -365,10 +368,10 @@ extension ViewController{
 //        if let coalesced = event?.coalescedTouches(for: touches.first!) {
 //            coalescedPoints.append(contentsOf: coalesced)
 //        }
-
         
         for touch in touches {
-      
+            print(touch.force,"FORCE IS")
+
             if(touch.force>0){
                 sizeOfTouch=touch.force
                 
