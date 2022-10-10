@@ -181,7 +181,7 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
         pipelineStateDescriptor.colorAttachments[0].sourceAlphaBlendFactor = MTLBlendFactor.one
         pipelineStateDescriptor.colorAttachments[0].destinationRGBBlendFactor = MTLBlendFactor.oneMinusSourceAlpha
         pipelineStateDescriptor.colorAttachments[0].destinationAlphaBlendFactor = MTLBlendFactor.oneMinusSourceAlpha
-        
+
         // create a compiled pipeline state object. Shader functions (from the render pipeline descriptor)
         // are compiled when this is created unlessed they are obtained from the device's cache
         do {
@@ -280,7 +280,7 @@ class Renderer_: NSObject, ViewControllerDelegate, ViewDelegate {
             FTBlitEncoder.copy(sourceTexture: view.finalRenderTexture!,
                                targetTexture: draww?.texture,
                                commandBuffer: commandBuffer!)
-            let shader = MPSImageGaussianBlur(device: _device!, sigma: 1.0)
+            let shader = MPSImageGaussianBlur(device: _device!, sigma:1.0)
          shader.encode(commandBuffer: commandBuffer!, sourceTexture: view.finalRenderTexture!,
                        destinationTexture: draww!.texture)
             // schedule a present once rendering to the framebuffer is complete

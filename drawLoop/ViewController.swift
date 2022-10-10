@@ -314,7 +314,9 @@ class ViewController: BaseViewController {
                 return
             }
             if(touch.force>0){
-                sizeOfTouch=touch.force
+                sizeOfTouch=min(max(0.4, touch.force), 3)
+
+             
                 
             }else{
                 print("ITS zero moved",sizeOfTouch)
@@ -323,10 +325,11 @@ class ViewController: BaseViewController {
             let cg=CGPoint(x: CGFloat(point.x), y:CGFloat(point.y))
             let vertex=VertexImage(
                 position: cg,
-                size: 20 * sizeOfTouch  ,//* touch.force,
+                size: 50 * sizeOfTouch  ,//* touch.force,
                 color: UIColor.yellow,
                 rotation: 0
             )
+
             _imageFlowManager.addCGPoint(cg, Float(sizeOfTouch),color: UIColor.red)
 
 

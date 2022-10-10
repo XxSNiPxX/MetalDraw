@@ -37,7 +37,7 @@ final class TextureHelper {
     static func createTexture(with size: CGSize, device: MTLDevice) -> MTLTexture {
         var ttexture:MTLTexture!
         let textureLoader = MTKTextureLoader(device: device)
-        if let img = UIImage(named: "paper.png") {
+        if let img = UIImage(named: "pngegg.png") {
             let temp=resizeImage(image: img, newWidth: CGFloat(Int(size.width*2)), newHeight: CGFloat(Int(size.height*2)))
             let cg = temp.cgImage
             ttexture = try! textureLoader.newTexture(cgImage: cg!, options: [

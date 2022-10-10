@@ -115,7 +115,8 @@ class View: BaseView {
         colorAttachment?.clearColor = MTLClearColorMake(0.65, 0.65, 0.65, 1.0)
         colorAttachment?.storeAction = MTLStoreAction.store
         
-    
+//        colorAttachment?.clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 0.0)
+
         
 
     }

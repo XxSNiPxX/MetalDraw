@@ -346,7 +346,7 @@ return
             let y = catmullRom(CGFloat(t), p0.y, p1.y, p2.y, p3.y)
             let vertex=VertexImage(
                 position: CGPoint(x: x, y: y),
-                size: 4 * CGFloat(temp_size)  ,//* touch.force,
+                size: 10 * CGFloat(temp_size)  ,//* touch.force,
                 color: color,
                 rotation: 0
             )
