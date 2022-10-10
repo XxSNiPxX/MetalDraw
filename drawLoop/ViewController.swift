@@ -349,7 +349,7 @@ class ViewController: BaseViewController {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)  {
                 let nc = NotificationCenter.default
-        nc.post( name: UIApplication.didEnterBackgroundNotification, object: nil)
+        nc.post( name: UIApplication.didEnterkgroundNotification, object: nil)
 
          touchFunction(touches, with: event)
 
