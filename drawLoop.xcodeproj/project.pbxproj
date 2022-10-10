@@ -38,12 +38,12 @@
 		1473B10728CEF4E20053E3BA /* TextureHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B10628CEF4E20053E3BA /* TextureHelper.swift */; };
 		1473B10928CEF5070053E3BA /* CGUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B10828CEF5070053E3BA /* CGUtils.swift */; };
 		1473B10B28CEF8BE0053E3BA /* FTBlitEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1473B10A28CEF8BE0053E3BA /* FTBlitEncoder.swift */; };
+		E714367728F4013500DC6D28 /* p4per.png in Resources */ = {isa = PBXBuildFile; fileRef = E714367428F4013400DC6D28 /* p4per.png */; };
+		E714367828F4013500DC6D28 /* paper.png in Resources */ = {isa = PBXBuildFile; fileRef = E714367528F4013500DC6D28 /* paper.png */; };
+		E714367928F4013500DC6D28 /* pngegg.png in Resources */ = {isa = PBXBuildFile; fileRef = E714367628F4013500DC6D28 /* pngegg.png */; };
 		E7A062D528E46AAA006A1CE4 /* alternateFlowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A062D428E46AAA006A1CE4 /* alternateFlowManager.swift */; };
 		E7A062D728E46BC6006A1CE4 /* VectorCG.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A062D628E46BC6006A1CE4 /* VectorCG.swift */; };
 		E7A6E64028EADA3A00B8F6A4 /* FlowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A6E63F28EADA3A00B8F6A4 /* FlowManager.swift */; };
-		E7AB079328EFE25300ED2B70 /* p4per.png in Resources */ = {isa = PBXBuildFile; fileRef = E7AB079228EFE25300ED2B70 /* p4per.png */; };
-		E7AB079528EFE4EF00ED2B70 /* pngegg.png in Resources */ = {isa = PBXBuildFile; fileRef = E7AB079428EFE4EF00ED2B70 /* pngegg.png */; };
-		E7ABF6C528EC10FC00DDD97D /* paper.png in Resources */ = {isa = PBXBuildFile; fileRef = E7ABF6C428EC10FC00DDD97D /* paper.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,12 +100,12 @@
 		1473B10628CEF4E20053E3BA /* TextureHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureHelper.swift; sourceTree = "<group>"; };
 		1473B10828CEF5070053E3BA /* CGUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGUtils.swift; sourceTree = "<group>"; };
 		1473B10A28CEF8BE0053E3BA /* FTBlitEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTBlitEncoder.swift; sourceTree = "<group>"; };
+		E714367428F4013400DC6D28 /* p4per.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p4per.png; sourceTree = "<group>"; };
+		E714367528F4013500DC6D28 /* paper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paper.png; sourceTree = "<group>"; };
+		E714367628F4013500DC6D28 /* pngegg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pngegg.png; sourceTree = "<group>"; };
 		E7A062D428E46AAA006A1CE4 /* alternateFlowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = alternateFlowManager.swift; sourceTree = "<group>"; };
 		E7A062D628E46BC6006A1CE4 /* VectorCG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorCG.swift; sourceTree = "<group>"; };
 		E7A6E63F28EADA3A00B8F6A4 /* FlowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowManager.swift; sourceTree = "<group>"; };
-		E7AB079228EFE25300ED2B70 /* p4per.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = p4per.png; path = ../../../Downloads/p4per.png; sourceTree = "<group>"; };
-		E7AB079428EFE4EF00ED2B70 /* pngegg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pngegg.png; path = ../../../Downloads/pngegg.png; sourceTree = "<group>"; };
-		E7ABF6C428EC10FC00DDD97D /* paper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = paper.png; path = ../../../Downloads/paper.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,9 +207,6 @@
 		1473B0AD28CB14460053E3BA = {
 			isa = PBXGroup;
 			children = (
-				E7AB079228EFE25300ED2B70 /* p4per.png */,
-				E7AB079428EFE4EF00ED2B70 /* pngegg.png */,
-				E7ABF6C428EC10FC00DDD97D /* paper.png */,
 				1473B0B828CB14460053E3BA /* drawLoop */,
 				1473B0CF28CB14480053E3BA /* drawLoopTests */,
 				1473B0D928CB14480053E3BA /* drawLoopUITests */,
@@ -230,6 +227,9 @@
 		1473B0B828CB14460053E3BA /* drawLoop */ = {
 			isa = PBXGroup;
 			children = (
+				E714367428F4013400DC6D28 /* p4per.png */,
+				E714367528F4013500DC6D28 /* paper.png */,
+				E714367628F4013500DC6D28 /* pngegg.png */,
 				1456DE3E28D1F48A000AD31A /* BufferLogic */,
 				1456DE3B28D1EEE3000AD31A /* Configurations */,
 				1456DE3128D095B1000AD31A /* Renderer */,
@@ -382,11 +382,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1473B0C628CB14480053E3BA /* LaunchScreen.storyboard in Resources */,
-				E7AB079328EFE25300ED2B70 /* p4per.png in Resources */,
+				E714367728F4013500DC6D28 /* p4per.png in Resources */,
+				E714367828F4013500DC6D28 /* paper.png in Resources */,
 				1473B10528CB63310053E3BA /* Smudge.png in Resources */,
-				E7ABF6C528EC10FC00DDD97D /* paper.png in Resources */,
 				1473B0C328CB14480053E3BA /* Assets.xcassets in Resources */,
-				E7AB079528EFE4EF00ED2B70 /* pngegg.png in Resources */,
+				E714367928F4013500DC6D28 /* pngegg.png in Resources */,
 				1473B0C128CB14460053E3BA /* Main.storyboard in Resources */,
 				1473B10328CB60A00053E3BA /* circle.png in Resources */,
 			);
