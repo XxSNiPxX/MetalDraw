@@ -60,11 +60,28 @@ class View: BaseView {
 
     
     private func initCommon() {
-            self.isOpaque = true
-        self.backgroundColor = UIColor(red: CGFloat(0.65), green: CGFloat(0.65), blue: CGFloat(0.65), alpha: CGFloat(1.0))
-            _metalLayer = (self.layer as! CAMetalLayer)
+            self.isOpaque = false
+        let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
+           backgroundImage.image = UIImage(named: "car.png")
+        backgroundImage.contentMode =  UIView.ContentMode.scaleAspectFill
+//        self.sendSubviewToBack(backgroundImage)
+        let kimg=UIImage(named: "bg.png")
+        let resizedImage = kimg?.resized(to: CGSize(width: 1100, height: 800))
 
-        
+//        self.addSubview(backgroundImage)
+        //           self.insertSubview(backgroundImage, at: 0)
+        self.backgroundColor=UIColor(patternImage: resizedImage!)
+//        self.backgroundColor = UIColor(red: CGFloat(0), green: CGFloat(1), blue: CGFloat(0), alpha: CGFloat(1.0))
+        let myLayer = CALayer()
+        let myImage = UIImage(named: "car.png")?.cgImage
+        myLayer.frame = self.bounds
+        myLayer.contents = myImage
+     
+            _metalLayer = (self.layer as! CAMetalLayer)
+//        self.layer.insertSublayer(_metalLayer, at: 1)
+
+      
+//        _metalLayer.contents=UIImage(named: "car.png")?.cgImage
         device = MTLCreateSystemDefaultDevice()!
         
         _metalLayer.device          = device

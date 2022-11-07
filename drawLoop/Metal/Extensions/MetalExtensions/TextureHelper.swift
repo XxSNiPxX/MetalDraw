@@ -37,12 +37,16 @@ final class TextureHelper {
     static func createTexture(with size: CGSize, device: MTLDevice) -> MTLTexture {
         var ttexture:MTLTexture!
         let textureLoader = MTKTextureLoader(device: device)
-        if let img = UIImage(named: "pngegg.png") {
-            let temp=resizeImage(image: img, newWidth: CGFloat(Int(size.width*2)), newHeight: CGFloat(Int(size.height*2)))
+        if let img = UIImage(named: "frost.png") {
+            let iimg=img.alpha(0.4)
+            let temp=resizeImage(image: iimg, newWidth: CGFloat(Int(size.width*2)), newHeight: CGFloat(Int(size.height*2)))
             let cg = temp.cgImage
+            print(cg?.alphaInfo,"dsfsdf")
             ttexture = try! textureLoader.newTexture(cgImage: cg!, options: [
                 MTKTextureLoader.Option.SRGB : false,
-                MTKTextureLoader.Option.textureStorageMode: MTLStorageMode.shared.rawValue
+                
+                MTKTextureLoader.Option.textureStorageMode: MTLStorageMode.shared.rawValue,
+                
 
             ])
         }
@@ -55,6 +59,7 @@ final class TextureHelper {
 //        guard let texture = device.makeTexture(descriptor: textureDesc) else {
 //            fatalError("Unable to create texture")
 //        }
+     
         return ttexture
     }
 

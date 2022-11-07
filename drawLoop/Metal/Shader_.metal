@@ -85,8 +85,9 @@ fragment half4 textured_fragment(Vertex vert [[stage_in]], sampler sampler2D,
     
     float2 text_coord = transformPointCoord(pointCoord, vert.rotation, float2(0.5));
     float4 color = float4(texture.sample(sampler2D, text_coord));
+    color.a=0.1;
     float4 ret = float4(vert.color.rgb, color.a * vert.color.a * vert.color.a);
-    
+
     return half4(ret);
 }
 

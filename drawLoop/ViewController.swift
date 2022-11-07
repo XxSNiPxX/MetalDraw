@@ -310,11 +310,9 @@ class ViewController: BaseViewController {
         }
         for touch in touches {
             print(touch.force,"FORCE IS")
-            if(touch.force==0.0){
-                return
-            }
+    
             if(touch.force>0){
-                sizeOfTouch=min(max(0.4, touch.force), 3)
+                sizeOfTouch=min(max(10, touch.force),10)
 
              
                 
@@ -330,7 +328,7 @@ class ViewController: BaseViewController {
                 rotation: 0
             )
 
-            _imageFlowManager.addCGPoint(cg, Float(sizeOfTouch),color: UIColor.red)
+            _imageFlowManager.addCGPoint(cg, Float(sizeOfTouch),color: UIColor.black)
 
 
 //            _imageFlowManager.addKeyVertex(cg, point_size: 40 * Float(touch.force))
@@ -349,7 +347,7 @@ class ViewController: BaseViewController {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)  {
                 let nc = NotificationCenter.default
-        nc.post( name: UIApplication.didEnterkgroundNotification, object: nil)
+        nc.post( name: UIApplication.didEnterBackgroundNotification, object: nil)
 
          touchFunction(touches, with: event)
 
